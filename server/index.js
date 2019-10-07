@@ -4,7 +4,9 @@ const cors = require('cors');
 const massive = require('massive'); 
 const session = require('express-session'); 
 
-// Controller Files 
+// Controller Files
+const authCtrl = require('./controllers/authController.js')
+
 
 // Middleware Files
 
@@ -39,10 +41,9 @@ massive(CONNECTION_STRING)
     .catch(err => console.log(err)); 
 
 // Auth EndPoints
-app.post('api/register/employee', );
-app.post('/api/register/owner',); 
-app.post('/api/login',);  
-app.delete('/api/logout',); 
+app.post('/api/register', authCtrl.register); 
+app.post('/api/login', authCtrl.login);  
+app.delete('/api/logout', authCtrl.logout); 
 app.delete('/api/delete-account',); 
 app.put('/api/update-user', ); 
 

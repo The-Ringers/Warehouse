@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs'); 
 
 const register = async (req, res) => {
+    console.log('hit register')
     const { email, password, role } = req.body;
     const db = req.app.get('db');
     const founderUser = await db.get_user([email]); 
@@ -32,6 +33,7 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+    console.log('hit login')
     const { email, password } = req.body; 
     const db = req.app.get('db'); 
     const founderUser = await db.get_user([email]); 
@@ -61,6 +63,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
+    console.log('hit logout')
     req.session.destory(); 
     res.status(200).send('User logged out');
 }
