@@ -6,12 +6,14 @@ const session = require('express-session');
 
 // Controller Files 
 
+// Middleware Files
+
 // ENV Variables 
 const {
     SERVER_PORT,
     CONNECTION_STRING, 
     SESSION_SECRET
-} = precess.env; 
+} = process.env; 
 
 // App Instace 
 const app = express(); 
@@ -22,5 +24,41 @@ app.use(cors());
 app.use(session({
     resave: false, 
     saveUninitialized: true, 
-    secret: SESSION_SECRET
-}))
+    secret: SESSION_SECRET,
+    cookie: {
+        maxAge: 60000000
+    }
+}));
+
+// DB Connection 
+massive(CONNECTION_STRING)
+    .then(dbInstance => {
+        app.set('db', dbInstance);
+        console.log('Database Connected'); 
+    })
+    .catch(err => console.log(err)); 
+
+// Auth EndPoints
+app.post('api/register/employee', );
+app.post('/api/register/owner',); 
+app.post('/api/login',);  
+app.delete('/api/logout',); 
+app.delete('/api/delete-account',); 
+app.put('/api/update-user', ); 
+
+// Sales Endpoints
+app.get('/api/sales/:id',); 
+app.get('/api/sales', ); 
+app.post('/api/sales', ); 
+app.put('/api/sales/:id', );
+app.delete('/api/sales/:id', ); 
+
+// Inventory Endpoints
+app.get('/api/inventory', ); 
+app.get('/api/inventory/:id', );
+app.post('/api/invetory', ); 
+app.put('/api/inventory/:id'); 
+app.delete('/api/inventory/:id', ); 
+
+// Server listening
+app.listen(SERVER_PORT, () => console.log(`Server is running on ${SERVER_PORT}`)); 
