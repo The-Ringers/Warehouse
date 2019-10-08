@@ -1,5 +1,7 @@
 import React from 'react';
 import './App.css';
+import Contact from './components/Contact/Contact'
+import './Reset.css'
 
 // Routing
 import routes from './utils/routes';
@@ -15,6 +17,7 @@ function App() {
     <div className="App">
       <Nav />
       {routes}
+      <Contact/>
     </div>
   );
 }
