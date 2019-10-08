@@ -7,7 +7,7 @@ const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files
 const authCtrl = require('./controllers/authController.js')
-
+const inventoryCtrl = require('./controllers/inventoryController'); 
 
 // Middleware Files
 
@@ -57,11 +57,11 @@ app.put('/api/sales/:id', );
 app.delete('/api/sales/:id', ); 
 
 // Inventory Endpoints
-app.get('/api/inventory', ); 
-app.get('/api/inventory/:id', );
-app.post('/api/invetory', ); 
-app.put('/api/inventory/:id'); 
-app.delete('/api/inventory/:id', ); 
+app.get('/api/inventory', inventoryCtrl.searchInventory); 
+app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
+app.post('/api/invetory', inventoryCtrl.createInventory); 
+app.put('/api/inventory/:id', inventoryCtrl.updateInventory); 
+app.delete('/api/inventory/:id', inventoryCtrl.deleteInventory); 
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)
