@@ -71,8 +71,8 @@ const useStyles = makeStyles(theme => ({
         border: 0,
         color: 'white',
         marginTop: '20px',
-        height: '20%',
-        width: '30%',
+        height: '100px',
+        width: '200px',
         '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
         }
@@ -103,11 +103,12 @@ export default function Contact() {
     
     
     return (
-        <form className={classes.container} method='POST' noValidate autoComplete='on'>
+        <form id='font' className={classes.container} method='POST' noValidate autoComplete='on'>
             <div className={classes.formContainer}>
                 <p className={classes.p}>Contact Us</p>
                 <h1 className={classes.h1}>Name</h1>
                 <TextField
+                    id='font'
                     className={classes.TextField}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -115,6 +116,7 @@ export default function Contact() {
                 />
                 <h1 className={classes.h1}>Email</h1>
                 <TextField
+                    id='font'
                     className={classes.TextField}
                     value={email}
                     type='email'
@@ -123,6 +125,7 @@ export default function Contact() {
                 />
                 <h1 className={classes.h1}>Message</h1>
                 <TextareaAutosize
+                    id='font'
                     label='Message'
                     placeholder='Write your message here...'
                     rows={10}
