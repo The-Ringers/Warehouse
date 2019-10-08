@@ -5,7 +5,9 @@ const massive = require('massive');
 const session = require('express-session'); 
 const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
-// Controller Files 
+// Controller Files
+const authCtrl = require('./controllers/authController.js')
+
 
 // Middleware Files
 
@@ -40,12 +42,11 @@ massive(CONNECTION_STRING)
     .catch(err => console.log(err)); 
 
 // Auth EndPoints
-app.post('api/register/employee', );
-app.post('/api/register/owner',); 
-app.post('/api/login',);  
-app.delete('/api/logout',); 
-app.delete('/api/delete-account',); 
-app.put('/api/update-user', ); 
+app.post('/api/register', authCtrl.register); 
+app.post('/api/login', authCtrl.login);  
+app.delete('/api/logout', authCtrl.logout); 
+app.delete('/api/delete-user', authCtrl.deleteUser); 
+app.put('/api/update-user', authCtrl.updateUser); 
 
 // Sales Endpoints
 app.get('/api/sales/:id',); 
