@@ -22,7 +22,7 @@ export function wipeRedux(){
     }
 }
 
-export default function reducer(state, action){
+export default function reducer(state = initialState, action){
     switch(action.type){
         case ADD_USER:
             const { user_id, first_name, last_name, role, email } = action.payload

@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Contact from './components/Contact/Contact'
 import './Reset.css'
 
 // Routing
@@ -17,7 +16,6 @@ function App() {
     <div className="App">
       <Nav />
       {routes}
-      <Contact/>
     </div>
   );
 }

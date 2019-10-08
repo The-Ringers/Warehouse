@@ -3,7 +3,6 @@ import axios from 'axios';
 
 // Routing
 import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
 
 // React-Redux
 import { connect } from 'react-redux';
