@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs'); 
 
 const register = async (req, res) => {
-    const { email, password, role, first_name, last_name, warehouse_id } = req.body;
+    const { email, password, role, first_name, last_name } = req.body;
     const db = req.app.get('db');
     const foundUser = await db.get_user([email]); 
 
@@ -10,11 +10,11 @@ const register = async (req, res) => {
     }
 
     // Salt and Hashing Password
-    const passwordSalt = bcrypt.getSaltSync(15); 
+    const passwordSalt = bcrypt.genSaltSync(15); 
     const passwordHash = bcrypt.hashSync(password, passwordSalt); 
 
     // Registering User 
-    const newUser = await db.register_user([email, passwordHash, role, first_name, last_name, warehouse_id]); 
+    const newUser = await db.register_user([email, passwordHash, first_name, last_name, role]); 
 
     // Deleting Unhashed Password 
     delete newUser[0].password; 
