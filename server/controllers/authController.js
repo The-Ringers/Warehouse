@@ -58,7 +58,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     console.log('hit logout')
-    req.session.destory(); 
+    req.session.destroy(); 
     res.status(200).send('User logged out');
 };
 
