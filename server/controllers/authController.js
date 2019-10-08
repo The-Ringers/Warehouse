@@ -43,7 +43,9 @@ const login = async (req, res) => {
         const accountInfo = {
             user_id: foundUser[0].user_id,
             role: foundUser[0].role, 
-            email: foundUser[0].email
+            email: foundUser[0].email,
+            first_name: foundUser[0].first_name,
+            last_name: foundUser[0].last_name
         };
 
         res.status(200).send(accountInfo); 
