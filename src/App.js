@@ -1,6 +1,9 @@
 import React from 'react';
 import './App.css';
 
+// Routing
+import routes from './utils/routes';
+
 // Components
 import Nav from './components/Nav/Nav';
 
@@ -11,6 +14,7 @@ function App() {
   return (
     <div className="App">
       <Nav />
+      {routes}
     </div>
   );
 }
