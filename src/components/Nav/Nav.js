@@ -12,6 +12,8 @@ import './Nav.css';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+    position: 'fixed',
+    width: '100%'
   },
   mainNav: {
     position: 'static',
@@ -57,14 +59,18 @@ const useStyles = makeStyles(theme => ({
     },
   },
   buttonMargin: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '35px',
   },
   buttonStyle: {
       background: '#640D0D',
       borderRadius: 3,
       border: 0,
       color: 'white',
-      height: 33,
+      height: '100%',
       '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
       }
