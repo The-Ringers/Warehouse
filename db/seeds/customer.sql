@@ -9,4 +9,4 @@ CREATE TABLE customers (
     zip VARCHAR(20),
     email VARCHAR(320) NOT NULL,
     phone VARCHAR(15)
-);g
+);

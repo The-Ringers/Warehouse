@@ -66,7 +66,7 @@ const deleteUser = async(req, res) => {
     const user_id = +req.params.user_id; 
     const { email } = req.session; 
     const db = req.app.get('db'); 
-    const foundUser = await db.find_user([email]);
+    const foundUser = await db.get_user([email]);
     const role = foundUser[0].role; 
 
     if(role === 'manger' || role === 'owner' || role === 'admin') {
@@ -85,7 +85,7 @@ const updateUser = async(req, res) => {
     const { newRole } = req.body; 
     const { email } = req.session; 
     const db = req.app.get('db'); 
-    const foundUser = await db.find_user([email]);
+    const foundUser = await db.get_user([email]);
     const role = foundUser[0].role; 
 
     if(role === 'manager' || role === 'owner' || role === 'admin') {
@@ -99,10 +99,33 @@ const updateUser = async(req, res) => {
     }
 }; 
 
+const updatePassword = async(req, res) => {
+    const { password, newPassword} = req.body; 
+    const { email, user_id } = req.session; 
+    const db = req.app.get('db'); 
+    const foundUser = await db.get_user([email]); 
+    const authedPassword = bcrypt.compareSync(password, foundUser[0].password); 
+
+    if(authedPassword) {
+        const passwordSalt = bcrypt.genSaltSync(15); 
+        const newPasswordHash = bcrypt.hashSync(newPassword, passwordSalt); 
+
+        db.update_password([user_id, newPasswordHash])
+            .then(() => {
+                res.status(200).send('Password has been updated'); 
+            })
+    }
+
+    else {
+        res.status(401).send('Invalid credentials, please try again'); 
+    }
+};
+
 module.exports = {
     register, 
     login,
     logout, 
     deleteUser, 
-    updateUser
+    updateUser,
+    updatePassword
 };
