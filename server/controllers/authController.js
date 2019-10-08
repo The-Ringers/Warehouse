@@ -23,7 +23,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-    console.log('hit login')
     const { email, password } = req.body; 
     const db = req.app.get('db'); 
     const foundUser = await db.get_user([email]); 
@@ -35,17 +34,22 @@ const login = async (req, res) => {
     const authedPassword = bcrypt.compareSync(password, foundUser[0].password); 
 
     if(authedPassword) {
+        const user_id = foundUser[0].user_id
+        const warehouse_id = db.get_warehouse_id([user_id]) // Gets warehouse_id based on the user_id
+
         delete foundUser[0].password; 
         req.session.user_id = foundUser[0].user_id;
         req.session.role = foundUser[0].role; 
         req.session.email = foundUser[0].email; 
+        req.session.warehouse_id = warehouse_id
 
         const accountInfo = {
-            user_id: foundUser[0].user_id,
+            user_id: user_id,
             role: foundUser[0].role, 
             email: foundUser[0].email,
             first_name: foundUser[0].first_name,
-            last_name: foundUser[0].last_name
+            last_name: foundUser[0].last_name,
+            warehouse_id: warehouse_id
         };
 
         res.status(200).send(accountInfo); 
@@ -57,8 +61,7 @@ const login = async (req, res) => {
 };
 
 const logout = async (req, res) => {
-    console.log('hit logout')
-    req.session.destory(); 
+    req.session.destroy(); 
     res.status(200).send('User logged out');
 };
 
