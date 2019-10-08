@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors'); 
 const massive = require('massive'); 
 const session = require('express-session'); 
+const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files 
 
@@ -59,6 +60,9 @@ app.get('/api/inventory/:id', );
 app.post('/api/invetory', ); 
 app.put('/api/inventory/:id'); 
 app.delete('/api/inventory/:id', ); 
+
+// NodeMailer Endpoints
+app.post('/api/send', nodeMailerCtrl.mail)
 
 // Server listening
 app.listen(SERVER_PORT, () => console.log(`Server is running on ${SERVER_PORT}`)); 

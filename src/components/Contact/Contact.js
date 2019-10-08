@@ -86,10 +86,6 @@ export default function Contact() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('handleSubmit')
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
         axios.post('/api/send', {name, email, message}).then((response)=>{
             if (response.data.msg === 'success'){
                 alert("Message Sent."); 
@@ -100,7 +96,9 @@ export default function Contact() {
         })
     }
    const resetForm = () => {
-        document.getElementById('contact-form').reset();
+        setName('')
+        setEmail('')
+        setMessage('')
     }
     
     
@@ -111,14 +109,14 @@ export default function Contact() {
                 <h1 className={classes.h1}>Name</h1>
                 <TextField
                     className={classes.TextField}
-                    value={name.name}
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     margin='normal'
                 />
                 <h1 className={classes.h1}>Email</h1>
                 <TextField
                     className={classes.TextField}
-                    value={email.email}
+                    value={email}
                     type='email'
                     onChange={(e) => setEmail(e.target.value)}
                     margin='normal'
@@ -129,7 +127,7 @@ export default function Contact() {
                     placeholder='Write your message here...'
                     rows={10}
                     className={classes.TextareaAutosize}
-                    value={message.message}
+                    value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     margin='normal'
                 />
