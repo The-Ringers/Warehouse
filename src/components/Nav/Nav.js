@@ -93,6 +93,12 @@ const useStyles = makeStyles(theme => ({
       '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
       }
+  },
+  home: {
+    width: '160px',
+    '&:hover': {
+      cursor: 'pointer',
+    }
   }
 }));
 
@@ -117,12 +123,16 @@ function Nav(props) {
     })
   }
 
+  const routeToHome = () => {
+    props.history.push('/')
+  }
+
   return (
     <div className={classes.root}>
       <AppBar className={classes.mainNav}>
         <Toolbar>
           <Typography id='font' className={classes.title} variant="h4" noWrap>
-            Inventario
+            <p className={classes.home} onClick={routeToHome}>Inventario</p>
           </Typography>
           <div className={classes.input}>
             <InputBase
