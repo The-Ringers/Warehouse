@@ -1,12 +1,11 @@
 const bcrypt = require('bcryptjs'); 
 
 const register = async (req, res) => {
-    console.log('hit register')
-    const { email, password, role } = req.body;
+    const { email, password, role, first_name, last_name, warehouse_id } = req.body;
     const db = req.app.get('db');
-    const founderUser = await db.get_user([email]); 
+    const foundUser = await db.get_user([email]); 
 
-    if(founderUser[0]) {
+    if(foundUser[0]) {
         return res.status(409).send(`${email} is already taken. Please choose a different email.`);
     }
 
@@ -15,43 +14,36 @@ const register = async (req, res) => {
     const passwordHash = bcrypt.hashSync(password, passwordSalt); 
 
     // Registering User 
-    const newUser = await db.register_user([email, passwordHash, role]); 
+    const newUser = await db.register_user([email, passwordHash, role, first_name, last_name, warehouse_id]); 
 
     // Deleting Unhashed Password 
     delete newUser[0].password; 
 
-    // Setting Values to Session
-    req.session.user_id = founderUser[0].user_id;
-    req.session.role = role; 
-
-    const accountInfo = {
-        user_id: founderUser[0].user_id,
-        role: founderUser[0].role
-    };
-
-    res.status(200).send(accountInfo); 
+    res.status(200).send('Account created'); 
 };
 
 const login = async (req, res) => {
     console.log('hit login')
     const { email, password } = req.body; 
     const db = req.app.get('db'); 
-    const founderUser = await db.get_user([email]); 
+    const foundUser = await db.get_user([email]); 
 
-    if(!founderUser[0]) {
+    if(!foundUser[0]) {
         return res.status(403).send('Invalid credentials, please try again.')
     }
 
-    const authedPassword = bcrypt.compareSync(password, founderUser[0].password); 
+    const authedPassword = bcrypt.compareSync(password, foundUser[0].password); 
 
     if(authedPassword) {
-        delete founderUser[0].password; 
-        req.session.user_id = founderUser[0].user_id;
-        req.session.role = founderUser[0].role; 
+        delete foundUser[0].password; 
+        req.session.user_id = foundUser[0].user_id;
+        req.session.role = foundUser[0].role; 
+        req.session.email = foundUser[0].email; 
 
         const accountInfo = {
-            user_id: founderUser[0].user_id,
-            role: founderUser[0].role
+            user_id: foundUser[0].user_id,
+            role: foundUser[0].role, 
+            email: foundUser[0].email
         };
 
         res.status(200).send(accountInfo); 
@@ -66,10 +58,49 @@ const logout = async (req, res) => {
     console.log('hit logout')
     req.session.destory(); 
     res.status(200).send('User logged out');
-}
+};
+
+const deleteUser = async(req, res) => {
+    const user_id = +req.params.user_id; 
+    const { email } = req.session; 
+    const db = req.app.get('db'); 
+    const foundUser = await db.find_user([email]);
+    const role = foundUser[0].role; 
+
+    if(role === 'manger' || role === 'owner' || role === 'admin') {
+        db.delete_user([user_id])
+            .then(() => {
+                res.status(200).send('Account has been deleted'); 
+            })
+    }
+    else {
+        res.status(401).send('Invalid credentials')
+    }
+};
+
+const updateUser = async(req, res) => {
+    const user_id = +req.params.user_id; 
+    const { newRole } = req.body; 
+    const { email } = req.session; 
+    const db = req.app.get('db'); 
+    const foundUser = await db.find_user([email]);
+    const role = foundUser[0].role; 
+
+    if(role === 'manager' || role === 'owner' || role === 'admin') {
+        db.update_user([user_id, newRole])
+            .then(() => {
+                res.status(200).send('Account has been updated'); 
+            })
+    }
+    else {
+        res.status(401).send('Invalid credentials')
+    }
+}; 
 
 module.exports = {
     register, 
     login,
-    logout
+    logout, 
+    deleteUser, 
+    updateUser
 };

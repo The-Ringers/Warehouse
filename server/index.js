@@ -44,8 +44,8 @@ massive(CONNECTION_STRING)
 app.post('/api/register', authCtrl.register); 
 app.post('/api/login', authCtrl.login);  
 app.delete('/api/logout', authCtrl.logout); 
-app.delete('/api/delete-account',); 
-app.put('/api/update-user', ); 
+app.delete('/api/delete-user', authCtrl.deleteUser); 
+app.put('/api/update-user', authCtrl.updateUser); 
 
 // Sales Endpoints
 app.get('/api/sales/:id',); 
