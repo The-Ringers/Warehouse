@@ -1,4 +1,16 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
+// Routing
+import { withRouter } from 'react-router';
+
+// React-Redux
+import { connect } from 'react-redux';
+
+// Action Builders
+import { addUser } from '../../redux/reducer';
+
+// Material-UI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -13,10 +25,17 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     position: 'fixed',
-    width: '100%'
+    zIndex: 9999,
+    height: '75px',
+    width: '100%',
+    backgroundColor: 'black'
   },
   mainNav: {
+    height: '100%',
     position: 'static',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'space-between',
     backgroundColor: '#e5e5e5'
   },
   menuButton: {
@@ -74,49 +93,80 @@ const useStyles = makeStyles(theme => ({
       '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
       }
+  },
+  home: {
+    width: '160px',
+    '&:hover': {
+      cursor: 'pointer',
+    }
   }
 }));
 
-export default function Nav() {
+function Nav(props) {
+  console.log(props)
   const classes = useStyles();
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
+  const loginUser = () => {
+    const body = {email, password}
+    axios.post('/api/login', body).then(res => {
+      const { user_id, first_name, last_name, role, email } = res.data
+      props.addUser(user_id, first_name, last_name, role, email)
+      setEmail('')
+      setPassword('')
+      props.history.push('/dashboard')
+    }).catch(err => {
+      console.log(err)
+      setEmail('')
+      setPassword('')
+    })
+  }
+
+  const routeToHome = () => {
+    props.history.push('/')
+  }
 
   return (
     <div className={classes.root}>
       <AppBar className={classes.mainNav}>
         <Toolbar>
           <Typography id='font' className={classes.title} variant="h4" noWrap>
-            Inventario
+            <p className={classes.home} onClick={routeToHome}>Inventario</p>
           </Typography>
           <div className={classes.input}>
             <InputBase
               id='font'
-              placeholder="Username"
+              placeholder="Email"
+              value={email}
+              type='text'
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onChange={e => setUsername({username: e.target.value})}
+              onChange={e => setEmail(e.target.value)}
             />
           </div>
           <div className={classes.input}>
             <InputBase
               id='font'
               placeholder="Password"
+              value={password}
+              type='password'
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onChange={e => setPassword({password: e.target.value})}
+              onChange={e => setPassword(e.target.value)}
             />
           </div>
           <div className={classes.buttonMargin}>
             <Button
               id='font'
               className={classes.buttonStyle}
+              onClick={loginUser}
             >
                 Login            
             </Button>
@@ -126,3 +176,5 @@ export default function Nav() {
     </div>
   );
 }
+
+export default withRouter(connect(null, {addUser})(Nav))
