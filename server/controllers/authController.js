@@ -50,7 +50,7 @@ const login = async (req, res) => {
             first_name: foundUser[0].first_name,
             last_name: foundUser[0].last_name,
             warehouses: warehouses,
-            compay: company
+            company: company[0]
         };
 
         res.status(200).send(accountInfo); 
