@@ -13,17 +13,17 @@ import { connect } from 'react-redux';
 import './Dashboard.css'
 
 class Dashboard extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
-            warehouses: this.props.warehouses
+            warehouses: props.warehouses            
         }
     }
 
     render() {
         const mappedWarehouses = this.state.warehouses.map((element, index) => {
             return (
-                <Link key={index} to={`/warehouse/${element.warehouse_id}`}>
+                <Link key={index} to='/invoice'>
                     <Warehouse warehouse={element}/>
                 </Link>
             )

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { withRouter } from 'react-router'
 
 // Redux
+import { connect } from 'react-redux';
 import { wipeRedux } from '../../redux/reducer'
 
 // Stylesheets
@@ -33,6 +34,7 @@ function Sidebar(props) {
 
     const logoutUser = () => {
         axios.delete('/api/logout').then(() => {
+            props.wipeRedux()
             props.history.push('/')
         }).catch(err => {
             console.log(err)
@@ -56,4 +58,4 @@ function Sidebar(props) {
     )
 }
 
-export default withRouter(Sidebar)
+export default withRouter(connect(null, {wipeRedux})(Sidebar))
