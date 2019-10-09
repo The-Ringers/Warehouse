@@ -35,13 +35,12 @@ const login = async (req, res) => {
 
     if(authedPassword) {
         const user_id = foundUser[0].user_id
-        const warehouse_id = db.get_warehouse_id([user_id]) // Gets warehouse_id based on the user_id
+        const warehouses = await db.get_warehouse([user_id]) // Gets warehouse information based on the user_id
 
         delete foundUser[0].password; 
         req.session.user_id = foundUser[0].user_id;
         req.session.role = foundUser[0].role; 
         req.session.email = foundUser[0].email; 
-        req.session.warehouse_id = warehouse_id
 
         const accountInfo = {
             user_id: user_id,
@@ -49,7 +48,7 @@ const login = async (req, res) => {
             email: foundUser[0].email,
             first_name: foundUser[0].first_name,
             last_name: foundUser[0].last_name,
-            warehouse_id: warehouse_id
+            warehouses: warehouses
         };
 
         res.status(200).send(accountInfo); 
