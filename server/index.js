@@ -7,7 +7,7 @@ const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files
 const authCtrl = require('./controllers/authController.js')
-
+const inventoryCtrl = require('./controllers/inventoryController'); 
 
 // Middleware Files
 
@@ -45,8 +45,9 @@ massive(CONNECTION_STRING)
 app.post('/api/register', authCtrl.register); 
 app.post('/api/login', authCtrl.login);  
 app.delete('/api/logout', authCtrl.logout); 
-app.delete('/api/delete-user', authCtrl.deleteUser); 
-app.put('/api/update-user', authCtrl.updateUser); 
+app.delete('/api/delete-user/:id', authCtrl.deleteUser); 
+app.put('/api/update-user/:id', authCtrl.updateUser); 
+app.put('/api/update-password', authCtrl.updatePassword); 
 
 // Sales Endpoints
 app.get('/api/sales/:id',); 
@@ -56,11 +57,11 @@ app.put('/api/sales/:id', );
 app.delete('/api/sales/:id', ); 
 
 // Inventory Endpoints
-app.get('/api/inventory', ); 
-app.get('/api/inventory/:id', );
-app.post('/api/invetory', ); 
-app.put('/api/inventory/:id'); 
-app.delete('/api/inventory/:id', ); 
+app.get('/api/inventory', inventoryCtrl.searchInventory); 
+app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
+app.post('/api/invetory', inventoryCtrl.createInventory); 
+app.put('/api/inventory/:id', inventoryCtrl.updateInventory); 
+app.delete('/api/inventory/:id', inventoryCtrl.deleteInventory); 
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)

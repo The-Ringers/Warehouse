@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 
 // React-Redux
 import { connect } from 'react-redux';
+import { wipeRedux } from '../../redux/reducer'
 
 // Action Builders
 import { addUser } from '../../redux/reducer';
@@ -93,6 +94,12 @@ const useStyles = makeStyles(theme => ({
       '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
       }
+  },
+  home: {
+    width: '160px',
+    '&:hover': {
+      cursor: 'pointer',
+    }
   }
 }));
 
@@ -117,54 +124,98 @@ function Nav(props) {
     })
   }
 
+  const logoutUser = () => {
+    axios.delete('/api/logout').then(() => {
+        props.wipeRedux()
+        props.history.push('/')
+    }).catch(err => {
+        console.log(err)
+    })
+  }
+
+  const routeToHome = () => {
+    props.history.push('/')
+  }
+
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.mainNav}>
-        <Toolbar>
-          <Typography id='font' className={classes.title} variant="h4" noWrap>
-            Inventario
-          </Typography>
-          <div className={classes.input}>
-            <InputBase
-              id='font'
-              placeholder="Email"
-              value={email}
-              type='text'
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={e => setEmail(e.target.value)}
-            />
-          </div>
-          <div className={classes.input}>
-            <InputBase
-              id='font'
-              placeholder="Password"
-              value={password}
-              type='password'
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={e => setPassword(e.target.value)}
-            />
-          </div>
-          <div className={classes.buttonMargin}>
-            <Button
-              id='font'
-              className={classes.buttonStyle}
-              onClick={loginUser}
-            >
-                Login            
-            </Button>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <>
+    {
+      props.user_id
+      ?
+      <div className={classes.root}>
+        <AppBar className={classes.mainNav}>
+          <Toolbar>
+            <Typography id='font' className={classes.title} variant="h4" noWrap>
+              <p className={classes.home} onClick={routeToHome}>Inventario</p>
+            </Typography>
+            <div className={classes.buttonMargin}>
+              <Button
+                id='font'
+                className={classes.buttonStyle}
+                onClick={logoutUser}
+              >
+                  Logout            
+              </Button>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+      :
+      <div className={classes.root}>
+        <AppBar className={classes.mainNav}>
+          <Toolbar>
+            <Typography id='font' className={classes.title} variant="h4" noWrap>
+              <p className={classes.home} onClick={routeToHome}>Inventario</p>
+            </Typography>
+            <div className={classes.input}>
+              <InputBase
+                id='font'
+                placeholder="Email"
+                value={email}
+                type='text'
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={e => setEmail(e.target.value)}
+              />
+            </div>
+            <div className={classes.input}>
+              <InputBase
+                id='font'
+                placeholder="Password"
+                value={password}
+                type='password'
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={e => setPassword(e.target.value)}
+              />
+            </div>
+            <div className={classes.buttonMargin}>
+              <Button
+                id='font'
+                className={classes.buttonStyle}
+                onClick={loginUser}
+              >
+                  Login            
+              </Button>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+    }
+    </>
   );
 }
 
-export default withRouter(connect(null, {addUser})(Nav))
+const mapStateToProps = (state) => {
+  return{
+    user_id: state.user_id
+  }
+}
+
+export default withRouter(connect(mapStateToProps, {addUser, wipeRedux})(Nav))

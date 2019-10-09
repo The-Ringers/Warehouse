@@ -1,4 +1,9 @@
-const nodemailer = require('nodemailer')
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+
+const {
+    EMAIL_PASSWORD
+} = process.env
 
 const mail = (req, res) => {
     console.log ('mail')
@@ -8,7 +13,7 @@ const mail = (req, res) => {
         secure: true,
         auth: {
             user: 'inventario1019@gmail.com',
-            pass: 'devmtngrpproj1019'
+            pass: EMAIL_PASSWORD
         }
     })
     const mailOptions = {

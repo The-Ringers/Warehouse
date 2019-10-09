@@ -1,6 +1,6 @@
 CREATE TABLE warehouses (
     warehouse_id SERIAL PRIMARY KEY,
-    company_id INTEGER NOT NULL REFERENCES companies(company_id),
+    company_id INTEGER NOT NULL,
     branch_name VARCHAR(100),
     address VARCHAR(120),
     city VARCHAR(40),
