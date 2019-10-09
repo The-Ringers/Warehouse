@@ -7,11 +7,14 @@ export default class Warehouse extends Component {
     render() {
         return (
             <div className='warehouse-main'>
-                <p>{this.props.warehouse.branch_name}</p>
-                <p>{this.props.warehouse.address}</p>
-                <p>{this.props.warehouse.city}</p>
-                <p>{this.props.warehouse.state}</p>
-                <p>{this.props.warehouse.zip}</p>
+                <section className='warehouse-title'>
+                    <p>{this.props.warehouse.branch_name}</p>
+                </section>
+                <section className='warehouse-info'>
+                    <p>{this.props.warehouse.address}</p>
+                    <p>{this.props.warehouse.city}, {this.props.warehouse.state}</p>
+                    <p>{this.props.warehouse.zip}</p>
+                </section>
             </div>
         )
     }

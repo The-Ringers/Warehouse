@@ -9,8 +9,8 @@ import Invoice from '../components/Invoice/Invoice'
 export default (
     <Switch>
         <Route exact path='/' component={Landing}/>
-        <Route path='/dashboard' component={Dashboard}/>
         <Route path='/contact' component={Contact} />
-        <Route path='/invoice' component={Invoice}/>
+        <Route path='/:company/dashboard' component={Dashboard}/>
+        <Route path='/:company/invoice' component={Invoice}/>
     </Switch>
 )

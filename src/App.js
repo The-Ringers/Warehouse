@@ -6,6 +6,9 @@ import './Reset.css'
 import routes from './utils/routes';
 import { withRouter } from 'react-router';
 
+// Redux
+import { connect } from 'react-redux';
+
 // Components
 import Nav from './components/Nav/Nav';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -25,7 +28,7 @@ function App(props) {
         ? 
         <Nav /> 
         : 
-        props.location.pathname === '/dashboard'
+        props.location.pathname === `/${props.company.name}/dashboard`
         ?
         <Nav />
         :
@@ -36,4 +39,8 @@ function App(props) {
   );
 }
 
-export default withRouter(App);
+const mapStateToProps = (state) => {
+  return state
+}
+
+export default withRouter(connect(mapStateToProps)(App));

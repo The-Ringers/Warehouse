@@ -116,7 +116,7 @@ function Nav(props) {
       props.addUser(user_id, first_name, last_name, role, email, warehouses, company)
       setEmail('')
       setPassword('')
-      props.history.push('/dashboard')
+      props.history.push(`/${company.name}/dashboard`)
     }).catch(err => {
       console.log(err)
       setEmail('')

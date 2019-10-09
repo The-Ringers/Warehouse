@@ -21,17 +21,23 @@ class Dashboard extends Component {
     }
 
     render() {
+        console.log(this.props)
         const mappedWarehouses = this.state.warehouses.map((element, index) => {
             return (
-                <Link key={index} to='/invoice'>
-                    <Warehouse warehouse={element}/>
+                <Link key={index} to={`/${this.props.company.name}/invoice`} className='dashboard-link'>
+                    <Warehouse warehouse={element} company={this.props.company}/>
                 </Link>
             )
         })
         return (
             <div>
                 <div className='dashboard-margin'></div>
-                {mappedWarehouses}
+                <div className='company-name'>
+                    <p>{this.props.company.name}</p>
+                </div>
+                <div className='dashboard-warehouses-container'>
+                    <div className='dashboard-warehouses'>{mappedWarehouses}</div>
+                </div>
             </div>
         )
     }
