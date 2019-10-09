@@ -1,5 +1,5 @@
 CREATE TABLE inventory (
-    invnetory_id SERIAL PRIMARY KEY,
+    inventory_id SERIAL PRIMARY KEY,
     warehouse_id INTEGER NOT NULL REFERENCES warehouses(warehouse_id),
     price DECIMAL CONSTRAINT positive_price CHECK (price > 0),
     quantity INTEGER NOT NULL CONSTRAINT positive_quantity CHECK (quantity > 0),

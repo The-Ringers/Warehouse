@@ -52,17 +52,20 @@ app.put('/api/update-user/:id', authCtrl.updateUser);
 app.put('/api/update-password', authCtrl.updatePassword); 
 
 // Sales Endpoints
-app.get('/api/sales/:id', salesCtrl); 
-app.get('/api/sales', salesCtrl); 
-app.post('/api/sales', salesCtrl); 
-app.put('/api/sales/:id', salesCtrl);
-app.delete('/api/sales/:id', salesCtrl); 
+app.get('/api/sales/:id', salesCtrl.getSingleSales); 
+app.post('/api/sales', salesCtrl.createSales); 
+app.put('/api/sales/:id', salesCtrl.editSales);
+
+// TODO: we don't need a get all sales at this time.
+// app.get('/api/sales', salesCtrl); 
+// TODO: we don't need a delete at this time. 
+// app.delete('/api/sales/:id', salesCtrl); 
 
 // Inventory Endpoints
 app.get('/api/inventory', inventoryCtrl.searchInventory); 
 app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
-app.post('/api/invetory', inventoryCtrl.createInventory); 
-app.put('/api/inventory/:id', inventoryCtrl.updateInventory); 
+app.post('/api/inventory', inventoryCtrl.addInventory); 
+app.put('/api/inventory/:id', inventoryCtrl.editInventory); 
 app.delete('/api/inventory/:id', inventoryCtrl.deleteInventory); 
 
 // NodeMailer Endpoints
