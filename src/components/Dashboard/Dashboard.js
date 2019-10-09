@@ -6,30 +6,18 @@ import Warehouse from '../Warehouse/Warehouse'
 // Routing
 import { Link } from 'react-router-dom'
 
+// React-Redux
+import { connect } from 'react-redux';
+
 // Stylesheets
 import './Dashboard.css'
-import axios from 'axios';
 
 class Dashboard extends Component {
     constructor(){
         super()
         this.state = {
-            warehouses: []
+            warehouses: this.props.warehouses
         }
-    }
-
-    componentDidMount(){
-        this.getWarehouses()
-    }
-
-    getWarehouses = () => {
-        axios.get('/api/warehouse').then(res => {
-            this.setState({
-                warehouses: res.data
-            })
-        }).catch(err => {
-            console.log(err)
-        })
     }
 
     render() {
@@ -49,4 +37,8 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard
+const mapStateToProps = (state) => {
+    return state
+}
+
+export default connect(mapStateToProps)(Dashboard)

@@ -104,7 +104,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Nav(props) {
-  console.log(props)
   const classes = useStyles();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -112,9 +111,9 @@ function Nav(props) {
   const loginUser = () => {
     const body = {email, password}
     axios.post('/api/login', body).then(res => {
+      console.log(res.data)
       const { user_id, first_name, last_name, role, email, warehouses } = res.data
       props.addUser(user_id, first_name, last_name, role, email, warehouses)
-      console.log(props)
       setEmail('')
       setPassword('')
       props.history.push('/dashboard')
@@ -214,9 +213,7 @@ function Nav(props) {
 }
 
 const mapStateToProps = (state) => {
-  return{
-    state
-  }
+  return state
 }
 
 export default withRouter(connect(mapStateToProps, {addUser, wipeRedux})(Nav))
