@@ -3,11 +3,13 @@ const express = require('express');
 const cors = require('cors'); 
 const massive = require('massive'); 
 const session = require('express-session'); 
-const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files
-const authCtrl = require('./controllers/authController.js')
+const authCtrl = require('./controllers/authController.js');
 const inventoryCtrl = require('./controllers/inventoryController'); 
+const salesCtrl = require('./controllers/salesController'); 
+const nodeMailerCtrl = require('./controllers/nodeMailerController');
+
 
 // Middleware Files
 
@@ -50,11 +52,11 @@ app.put('/api/update-user/:id', authCtrl.updateUser);
 app.put('/api/update-password', authCtrl.updatePassword); 
 
 // Sales Endpoints
-app.get('/api/sales/:id',); 
-app.get('/api/sales', ); 
-app.post('/api/sales', ); 
-app.put('/api/sales/:id', );
-app.delete('/api/sales/:id', ); 
+app.get('/api/sales/:id', salesCtrl); 
+app.get('/api/sales', salesCtrl); 
+app.post('/api/sales', salesCtrl); 
+app.put('/api/sales/:id', salesCtrl);
+app.delete('/api/sales/:id', salesCtrl); 
 
 // Inventory Endpoints
 app.get('/api/inventory', inventoryCtrl.searchInventory); 
