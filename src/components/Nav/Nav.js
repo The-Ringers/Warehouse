@@ -112,8 +112,9 @@ function Nav(props) {
   const loginUser = () => {
     const body = {email, password}
     axios.post('/api/login', body).then(res => {
-      const { user_id, first_name, last_name, role, email } = res.data
-      props.addUser(user_id, first_name, last_name, role, email)
+      const { user_id, first_name, last_name, role, email, warehouses } = res.data
+      props.addUser(user_id, first_name, last_name, role, email, warehouses)
+      console.log(props)
       setEmail('')
       setPassword('')
       props.history.push('/dashboard')
@@ -214,7 +215,7 @@ function Nav(props) {
 
 const mapStateToProps = (state) => {
   return{
-    user_id: state.user_id
+    state
   }
 }
 
