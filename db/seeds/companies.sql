@@ -5,5 +5,5 @@ CREATE TABLE companies (
   city VARCHAR(40),
   state VARCHAR(2),
   zip VARCHAR(20),
-  owner INTEGER NOT NULL REFERENCES users
+  owner_id INTEGER NOT NULL
 );
