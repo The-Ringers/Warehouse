@@ -16,7 +16,21 @@ import './Reset.css';
 function App(props) {
   return (
     <div className="App">
-      {props.location.pathname === '/' ? <Nav /> : props.location.pathname === '/contact' ? <Nav /> : <Sidebar />}
+      {
+        props.location.pathname === '/' 
+        ? 
+        <Nav /> 
+        : 
+        props.location.pathname === '/contact' 
+        ? 
+        <Nav /> 
+        : 
+        props.location.pathname === '/dashboard'
+        ?
+        <Nav />
+        :
+        <Sidebar />
+      }
       {routes}
     </div>
   );
