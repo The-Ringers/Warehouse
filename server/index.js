@@ -57,6 +57,7 @@ app.put('/api/sales/:id', );
 app.delete('/api/sales/:id', ); 
 
 // Inventory Endpoints
+app.get('/api/categories/:id', inventoryCtrl.getCategories)
 app.get('/api/inventory', inventoryCtrl.searchInventory); 
 app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
 app.post('/api/inventory', inventoryCtrl.addInventory); 
