@@ -10,9 +10,9 @@ import Order from '../components/Order/Order'
 export default (
     <Switch>
         <Route exact path='/' component={Landing}/>
-        <Route path='/dashboard' component={Dashboard}/>
         <Route path='/contact' component={Contact} />
-        <Route path='/invoice' component={Invoice}/>
+        <Route path='/:company/dashboard' component={Dashboard}/>
+        <Route path='/:company/invoice' component={Invoice}/>
         <Route path='/order' component={Order}/>
     </Switch>
 )

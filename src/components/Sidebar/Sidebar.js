@@ -5,6 +5,7 @@ import axios from 'axios'
 import { withRouter } from 'react-router'
 
 // Redux
+import { connect } from 'react-redux';
 import { wipeRedux } from '../../redux/reducer'
 
 // Stylesheets
@@ -12,27 +13,28 @@ import './Sidebar.css';
 
 function Sidebar(props) {
     const routeToInvoice = () => {
-        props.history.push('/invoice')
+        props.history.push(`/${props.company.name}/invoice`)
     }
 
     const routeToOrder = () => {
-        props.history.push('/order')
+        props.history.push(`/${props.company.name}/order`)
     }
 
     const routeToQuote = () => {
-        props.history.push('/quote')
+        props.history.push(`/${props.company.name}/quote`)
     }
 
     const routeToInventory = () => {
-        props.history.push('/inventory')
+        props.history.push(`/${props.company.name}/inventory`)
     }
 
     const routeToSearch = () => {
-        props.history.push('/search')
+        props.history.push(`/${props.company.name}/search`)
     }
 
     const logoutUser = () => {
         axios.delete('/api/logout').then(() => {
+            props.wipeRedux()
             props.history.push('/')
         }).catch(err => {
             console.log(err)
@@ -43,11 +45,11 @@ function Sidebar(props) {
         <div className='sidebar-main'>
             <section>
                 <p className='sidebar-title'>Inventario</p>
-                <button className={props.location.pathname === '/invoice' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInvoice}>Invoice</button>
-                <button className={props.location.pathname === '/order' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToOrder}>Order</button>
-                <button className={props.location.pathname === '/quote' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
-                <button className={props.location.pathname === '/inventory' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
-                <button className={props.location.pathname === '/search' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
+                <button className={props.location.pathname === `/${props.company.name}/invoice` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInvoice}>Invoice</button>
+                <button className={props.location.pathname === `/${props.company.name}/order` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToOrder}>Order</button>
+                <button className={props.location.pathname === `/${props.company.name}/quote` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
+                <button className={props.location.pathname === `/${props.company.name}/inventory` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
+                <button className={props.location.pathname === `/${props.company.name}/search` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
             </section>
             <section>
                 <button className='sidebar-logout' onClick={logoutUser}>Logout</button>
@@ -56,4 +58,8 @@ function Sidebar(props) {
     )
 }
 
-export default withRouter(Sidebar)
+const mapStateToProps = (state) => {
+    return state
+}
+
+export default withRouter(connect(mapStateToProps, {wipeRedux})(Sidebar))
