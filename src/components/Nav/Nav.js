@@ -104,7 +104,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Nav(props) {
-  console.log(props)
   const classes = useStyles();
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -112,11 +111,11 @@ function Nav(props) {
   const loginUser = () => {
     const body = {email, password}
     axios.post('/api/login', body).then(res => {
-      const { user_id, first_name, last_name, role, email } = res.data
-      props.addUser(user_id, first_name, last_name, role, email)
+      const { user_id, first_name, last_name, role, email, warehouses, company } = res.data
+      props.addUser(user_id, first_name, last_name, role, email, warehouses, company)
       setEmail('')
       setPassword('')
-      props.history.push('/dashboard')
+      props.history.push(`/${company.name}/dashboard`)
     }).catch(err => {
       console.log(err)
       setEmail('')
@@ -213,9 +212,7 @@ function Nav(props) {
 }
 
 const mapStateToProps = (state) => {
-  return{
-    user_id: state.user_id
-  }
+  return state
 }
 
 export default withRouter(connect(mapStateToProps, {addUser, wipeRedux})(Nav))

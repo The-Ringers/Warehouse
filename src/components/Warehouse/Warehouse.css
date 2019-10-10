@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
+
+.warehouse-main{
+    min-height: 100px;
+    width: 350px;
+    background: #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Alegreya Sans SC', sans-serif;
+    border-radius: 5px;
+    box-shadow: 6px 6px 16px 0px rgba(0,0,0,0.35);
+}
+
+.warehouse-title{
+    font-size: 23px;
+    margin-top: 15px;
+    margin-left: 15px;
+    text-transform: capitalize;
+}
+
+.warehouse-info{
+    font-size: 18px;
+    margin-top: 5px;
+    margin-left: 30px;
+    margin-bottom: 15px;
+}

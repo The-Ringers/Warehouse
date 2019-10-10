@@ -34,8 +34,16 @@ const login = async (req, res) => {
     const authedPassword = bcrypt.compareSync(password, foundUser[0].password); 
 
     if(authedPassword) {
-        const user_id = foundUser[0].user_id
-        const warehouses = await db.get_warehouse([user_id]) // Gets warehouse information based on the user_id
+        const { user_id, role } = foundUser[0]
+        let warehouses
+        if(role === 'owner') {
+            warehouses = await db.get_company_warehouses([user_id]) // gets the warehouses that are in the company
+        }
+        else {
+            warehouses = await db.get_warehouse([user_id]) // Gets warehouse information based on the user_id
+        }
+
+        const company = await db.get_company_info_by_warehouse([warehouses[0].company_id])
 
         delete foundUser[0].password; 
         req.session.user_id = foundUser[0].user_id;
@@ -48,7 +56,8 @@ const login = async (req, res) => {
             email: foundUser[0].email,
             first_name: foundUser[0].first_name,
             last_name: foundUser[0].last_name,
-            warehouses: warehouses
+            warehouses: warehouses,
+            company: company[0]
         };
 
         res.status(200).send(accountInfo); 
