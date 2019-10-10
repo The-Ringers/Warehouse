@@ -12,7 +12,7 @@ export default (
         <Route exact path='/' component={Landing}/>
         <Route path='/contact' component={Contact} />
         <Route path='/:company/dashboard' component={Dashboard}/>
-        <Route path='/:company/invoice' component={Invoice}/>
-        <Route path='/:company/inventory' component={Inventory}/>
+        <Route path='/:company/invoice/:id' component={Invoice}/>
+        <Route path='/:company/inventory/:id' component={Inventory}/>
     </Switch>
 )

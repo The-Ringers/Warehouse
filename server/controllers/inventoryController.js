@@ -1,3 +1,12 @@
+const getCategories = async (req, res) => {
+    const { id } = req.params;
+    const db = req.app.get('db');
+
+    const categories = await db.get_categories([id]);
+
+    res.status(200).send(categories)
+}
+
 const searchInventory = async (req, res) => {
     const { category, warehouse_id } = req.query; 
     const db = req.app.get('db'); 
@@ -70,6 +79,7 @@ const deleteInventory = async (req, res) => {
 }; 
 
 module.exports = {
+    getCategories,
     searchInventory,
     getSingleInventory, 
     addInventory,
