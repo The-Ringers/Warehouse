@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 // Components
 import Warehouse from '../Warehouse/Warehouse'
@@ -8,6 +9,7 @@ import { Link } from 'react-router-dom'
 
 // React-Redux
 import { connect } from 'react-redux';
+import { addWarehouseId, addCategories } from '../../redux/reducer';
 
 // Stylesheets
 import './Dashboard.css'
@@ -16,16 +18,24 @@ class Dashboard extends Component {
     constructor(props){
         super(props)
         this.state = {
-            warehouses: props.warehouses            
+            warehouses: props.warehouses          
         }
     }
 
+    warehouseIdToRedux = (id) => {
+        this.props.addWarehouseId(id)
+        axios.get(`/api/categories/${id}`).then(res => {
+            this.props.addCategories(res.data)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
     render() {
-        console.log(this.props)
         const mappedWarehouses = this.state.warehouses.map((element, index) => {
             return (
-                <Link key={index} to={`/${this.props.company.name}/invoice`} className='dashboard-link'>
-                    <Warehouse warehouse={element} company={this.props.company}/>
+                <Link key={index} to={`/${this.props.company.name}/invoice/${element.warehouse_id}`} className='dashboard-link'>
+                    <Warehouse warehouse={element} company={this.props.company} warehouseIdToRedux={this.warehouseIdToRedux}/>
                 </Link>
             )
         })
@@ -47,4 +57,4 @@ const mapStateToProps = (state) => {
     return state
 }
 
-export default connect(mapStateToProps)(Dashboard)
+export default connect(mapStateToProps, {addWarehouseId, addCategories})(Dashboard)
