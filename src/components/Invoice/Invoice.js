@@ -6,10 +6,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import { TextField } from '@material-ui/core';
-import Button from '@material-ui/core/Button'
-import { connect } from 'react-redux'
+import Button from '@material-ui/core/Button';
+import { connect } from 'react-redux';
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,7 +42,16 @@ const useStyles = makeStyles(theme => ({
   },
   taxField: {
     width: '50px'
+  },
+  icon: {
+    width: '30px',
+    height: '30px',
+    marginTop: '12px'
+  },
+  qty: {
+    width: '60px'
   }
+  
 }));
 
 function ccyFormat(num) {
@@ -52,9 +62,9 @@ function priceRow(qty, unit) {
   return qty * unit;
 }
 
-function createRow(edit, sku, desc, qty, unit) {
+function createRow( sku, desc, qty, unit) {
   const price = priceRow(qty, unit);
-  return {edit, sku, desc, qty, unit, price };
+  return { sku, desc, qty, unit, price };
 }
 
 function subtotal(items) {
@@ -62,7 +72,13 @@ function subtotal(items) {
 }
 
 const rows = [
-  createRow('edit', 'this is a sku', 'Paperclips (Box)', 100, 1.15),
+  createRow('this is a sku', 'Paperclips (Box)', 150, 1.16),
+  createRow('this is a sku', 'Paperdclips (Box)', 102, 1.17),
+  createRow('this is a sku', 'Papersclips (Box)', 103, 1.18),
+  createRow('this is a sku', 'Paperfclips (Box)', 104, 1.19),
+
+
+
   
 ];
 
@@ -75,15 +91,15 @@ function SpanningTable(props) {
   const [search, setSearch] = useState('');
   const [inventory, setInventory] = useState('');
   const [tax, setTax] = useState('');
+  const [row, setRow] = useState(rows);
 
-  useEffect(() => {
-    console.log(props.match.params.id)
-  })
+  
   const getInventory = () => {
-    // const selectedWarehouseId = props.
-    axios.get(`/api/inventory/${sku}?warehouse_id={props.warehouses[]}`).then((response) => {
-      setInventory(response.data)
-      const {sku, description, price} = response.data
+    const {warehouse_id} = props
+    axios.get(`/api/inventory/${sku}?warehouse_id=${warehouse_id}`)
+      .then((response) => {
+      const {sku, description, price} = response.data[0]
+      setInventory(response.data[0])
       rows.push(createRow(sku, description, price))
     })
   }
@@ -91,12 +107,20 @@ function SpanningTable(props) {
   const invoiceTaxes = tax * invoiceSubtotal;
   const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-  const onDelete = (props) => {
-    axios.delete(`/api/inventory/id`).then(() => {
-        props.history.push('/invoice')
-    })
+  const onDelete = (index) => {
+    let newArray = row.slice()
+    newArray.splice(index, 1)
+    setRow(newArray)
   }
-  
+  const editQty = (e,i) => {
+    let newArray = row.slice()
+    let newRow = newArray[i]
+    newRow.qty = e.target.value
+    newRow.price = newRow.qty * newRow.unit
+    console.log(e.target.value)
+    console.log(row)
+    setRow(newArray)
+  }
   return (
     <Paper className={classes.paper}>
       <TextField onChange={e => setSearch(e.target.value)} label='Search...' type='search' id='filled-search' className={classes.TextField}></TextField>
@@ -104,36 +128,39 @@ function SpanningTable(props) {
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <Button onClick={onDelete} align='left'></Button>
-            <TableCell onClick={e => setSearch(e.target.value)} align='left'>SKU</TableCell>
-            <TableCell align='left'>Desciption</TableCell>
-            <TableCell>Qty.</TableCell>
-            <TableCell>Unit Price</TableCell>
-            <TableCell>Price</TableCell>
+            <TableCell align='right'></TableCell>
+            <TableCell onClick={e => setSearch(e.target.value)} align=''>SKU</TableCell>
+            <TableCell>Desciption</TableCell>
+            <TableCell className={classes.qty}>Qty.</TableCell>
+            <TableCell classname={classes.qty}>Unit Price</TableCell>
+            <TableCell className={classes.qty}>Price</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.sku}</TableCell>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell>{row.qty}</TableCell>
-              <TableCell>{row.unit}</TableCell>
-              <TableCell>{ccyFormat(row.price)}</TableCell>
+          {row.map((r, i) => (
+            <TableRow key={r.desc}>
+              <div className={classes.icons} align='center'>
+              <DeleteIcon align='right' onClick={() => onDelete(i)} className={classes.icon}></DeleteIcon>
+              </div>
+              <TableCell>{r.sku}</TableCell>
+              <TableCell>{r.desc}</TableCell>
+              <TextField className={classes.qty} onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
+              <TableCell>{r.unit}</TableCell>
+              <TableCell>{ccyFormat(r.price)}</TableCell>
             </TableRow>
           ))}
 
-          <TableRow>
+          <TableRow className={classes.Taxbox}>
             <TableCell rowSpan={3} />
             <TableCell align='center' colSpan={3}>Subtotal</TableCell>
             <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
           </TableRow>
-          <TableRow>
+          <TableRow className={classes.Taxbox}>
             <TableCell className={classes.Taxbox} align='center' colSpan={2}></TableCell>
             <TextField onChange={(e => setTax(e.target.value))} label='Tax' id="filled-number"type="decimal" className={classes.taxField} InputLabelProps={{shrink: true,}} marginTop="normal" variant='filled'/>
             <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
           </TableRow>
-          <TableRow>
+          <TableRow className={classes.Taxbox}>
             <TableCell align='center' colSpan={3}>Total</TableCell>
             <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
           </TableRow>
@@ -142,7 +169,7 @@ function SpanningTable(props) {
     </Paper>
   );
 };
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return state;
 };
 export default connect(mapStateToProps)(SpanningTable)
