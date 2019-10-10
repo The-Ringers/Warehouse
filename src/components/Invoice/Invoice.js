@@ -87,8 +87,8 @@ const invoiceSubtotal = subtotal(rows);
 
 function SpanningTable(props) {
   const classes = useStyles();
+  // const [search, setSearch] = useState('');
   const [sku, setSku] = useState('');
-  const [search, setSearch] = useState('');
   const [inventory, setInventory] = useState('');
   const [tax, setTax] = useState('');
   const [row, setRow] = useState(rows);
@@ -96,11 +96,18 @@ function SpanningTable(props) {
   
   const getInventory = () => {
     const {warehouse_id} = props
+    console.log('hit')
     axios.get(`/api/inventory/${sku}?warehouse_id=${warehouse_id}`)
       .then((response) => {
+        console.log(response)
       const {sku, description, price} = response.data[0]
       setInventory(response.data[0])
-      rows.push(createRow(sku, description, price))
+      let newArray = row.splice()
+      newArray.push(createRow(sku, description, price))
+      setRow(newArray)
+    })
+    .catch((error) => {
+      console.log(error)
     })
   }
 
@@ -123,13 +130,13 @@ function SpanningTable(props) {
   }
   return (
     <Paper className={classes.paper}>
-      <TextField onChange={e => setSearch(e.target.value)} label='Search...' type='search' id='filled-search' className={classes.TextField}></TextField>
+      <TextField onChange={e => setSku(e.target.value)} label='Search...' type='search' id='filled-search' className={classes.TextField}></TextField>
       <Button className={classes.Button} onClick={getInventory}>Add Item</Button>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
             <TableCell align='right'></TableCell>
-            <TableCell onClick={e => setSearch(e.target.value)} align=''>SKU</TableCell>
+            <TableCell align=''>SKU</TableCell>
             <TableCell>Desciption</TableCell>
             <TableCell className={classes.qty}>Qty.</TableCell>
             <TableCell classname={classes.qty}>Unit Price</TableCell>
