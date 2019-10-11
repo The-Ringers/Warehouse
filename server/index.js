@@ -43,6 +43,7 @@ massive(CONNECTION_STRING)
 
 // Auth EndPoints
 app.post('/api/register', authCtrl.register); 
+app.post('/api/register/company', authController.registerCompany)
 app.post('/api/login', authCtrl.login);  
 app.delete('/api/logout', authCtrl.logout); 
 app.delete('/api/delete-user/:id', authCtrl.deleteUser); 

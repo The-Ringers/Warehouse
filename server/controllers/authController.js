@@ -132,11 +132,25 @@ const updatePassword = async(req, res) => {
     }
 };
 
+const registerCompany = (req, res) => {
+
+    const { company, owner, warehouse } = req.body
+    const db = req.app.get('db')
+
+    const password = // TODO generate random password
+    const passwordSalt = bcrypt.genSaltSync(15)
+    const passwordHash = bcrypt.hashSync(password, passwordSalt)
+
+    const user = db.register_user([owner.email, passwordHash, owner.first_name, owner.last_name, 'owner'])
+    const company = db.create_company([company.name, company.address, company.city, company.state, company.zip, user.user_id])
+}
+
 module.exports = {
     register, 
     login,
     logout, 
     deleteUser, 
     updateUser,
-    updatePassword
+    updatePassword,
+    registerCompany
 };
