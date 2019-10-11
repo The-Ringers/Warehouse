@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
+
+#mui-box{
+    height: 100%;
+    width: 100%;
+    padding: 0;
+}
+
+.inventory-margin{
+    margin-top: 75px;
+}
+
+.inventory-header{
+    font-family: 'Alegreya Sans SC', sans-serif;
+    height: 75px;
+    width: calc(100% - 500px);
+    display: flex;
+    position: fixed;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    font-size: 24px;
+    font-weight: bold;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.inventory-table-even{
+    font-family: 'Alegreya Sans SC', sans-serif;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background: #e5e5e5;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.inventory-table-odd{
+    font-family: 'Alegreya Sans SC', sans-serif;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background: white;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.cell1{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell2{
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell3{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cell4{
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

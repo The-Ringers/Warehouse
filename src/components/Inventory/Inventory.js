@@ -11,6 +11,10 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+// Stylesheets
+import './Inventory.css';
+import axios from 'axios';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -23,7 +27,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      <Box p={3}>{children}</Box>
+      <Box id='mui-box' width='100%' p={3}>{children}</Box>
     </Typography>
   );
 }
@@ -47,20 +51,53 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
     height: '100vh',
+    width: 'calc(100% - 300px)',
     marginLeft: '300px'
   },
   tabs: {
+    width: '200px',
     borderRight: `1px solid ${theme.palette.divider}`,
   },
+  panel: {
+    height: '50px',
+    width: 'calc(100vw - 500px)',
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 }));
 
 function Inventory(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [inventory, setInventory] = React.useState([])
-  const mappedCategories = props.categories.map(element => {
-      return <Tab label={element.category} {...a11yProps(0)} />
+
+  const mappedCategories = props.categories.map((element, index) => {
+    return <Tab key={index} label={element.category} {...a11yProps(0)} />
   })
+
+  const mappedInventory = inventory.map((element, index)=> {
+    return (
+      <TabPanel className={classes.panel} key={index} value={value} index={value}>
+        <section className={index % 2 === 0 ? 'inventory-table-even' : 'inventory-table-odd'}>
+          <p className='cell1'>{element.sku}</p>
+          <p className='cell2'>{element.description}</p>
+          <p className='cell3'>{element.quantity}</p>
+          <p className='cell4'>{element.price}</p>
+        </section>
+      </TabPanel>
+    )
+  })
+  
+  useEffect(() => {
+    if(props.categories.length >= 1){
+      axios(`/api/inventory?category=${props.categories[value].category}&warehouse_id=${props.warehouse_id}`)
+        .then(res => {
+          setInventory(res.data)
+        })
+    }
+  }, [value])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,29 +113,18 @@ function Inventory(props) {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-          {mappedCategories}
+          {props.categories ? mappedCategories : null}
       </Tabs>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+      <div>
+        <section className='inventory-header'>
+          <p className='cell1'>SKU</p>
+          <p className='cell2'>Description</p>
+          <p className='cell3'>Qty.</p>
+          <p className='cell4'>Unit Price</p>
+        </section>
+        <section className='inventory-margin' />
+        {inventory ? mappedInventory : null}
+      </div>
     </div>
   );
 }
