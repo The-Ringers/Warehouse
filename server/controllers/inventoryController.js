@@ -29,9 +29,7 @@ const getSingleInventory = async (req, res) => {
     const db = req.app.get('db');     
     const sku  = req.params.id; 
     // Adding a + to change the warehouse_id from a string to an integer
-    const warehouse_id  = +req.query.warehouse_id  
-    console.log(typeof warehouse_id)
-    console.log(typeof sku)
+    const warehouse_id  = +req.query.warehouse_id;
 
     const singleInventory = await db.get_inventory_by_sku([sku, warehouse_id]); 
     res.status(200).send(singleInventory); 

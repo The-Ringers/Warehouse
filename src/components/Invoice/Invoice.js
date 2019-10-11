@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,7 +10,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles(theme => ({
@@ -20,8 +20,8 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     float: 'right',
     marginRight: '5px',
-  
   },
+  
   table: {
     minWidth: 700,
   },
@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   taxField: {
-    width: '50px'
+    width: '60px'
   },
   icon: {
     width: '30px',
@@ -66,71 +66,98 @@ const useStyles = makeStyles(theme => ({
   
 }));
 
-function ccyFormat(num) {
-  return `${num.toFixed(2)}`;
-}
-
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow( sku, desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { sku, desc, qty, unit, price };
-}
-
-function subtotal(items) {
+const calculateSubtotal = (items) => {
   return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
+};
 
-function SpanningTable(props) {
+export default function Invoice(props) {
   const classes = useStyles();
-  // const [search, setSearch] = useState('');
   const [sku, setSku] = useState('');
-  // const [inventory, setInventory] = useState([]);
-  const [tax, setTax] = useState('');
-  const [row, setRow] = useState([]);
+  const [taxRate, setTaxRate] = useState(0);
+  const [itemList, setItemList] = useState([]);
+  const subtotal = calculateSubtotal(itemList);
+  const tax = (taxRate/100) * subtotal;
+  const total = tax + subtotal;
 
-const invoiceSubtotal = subtotal(rows);
+// Redux 
+  const warehouse_id = useSelector(state => state.warehouse_id);
+  const company_id = useSelector(state => state.company.company_id);
+  const user_id = useSelector(state => state.company.user_id)
 
-
+  const ccyFormat = (num) => {
+    return `${num.toFixed(2)}`;
+  };
   
+  const priceItem = (qty, unit) => {
+    return qty * unit;
+  };
+
+  const addItem = ( sku, desc, qty, unit) => {
+    // the if statement sets the price to 0 if the qty is undefined
+    if(!qty) {
+      const price = priceItem(0, unit);
+      return { sku, desc, qty, unit, price };
+    }
+    else {
+      const price = priceItem(qty, unit);
+      return { sku, desc, qty, unit, price };
+    }
+  };
+
   const getInventory = () => {
-    const {warehouse_id} = props
-    console.log(sku)
-    console.log(warehouse_id)
+    // const {warehouse_id} = props;
     axios.get(`/api/inventory/${sku}?warehouse_id=${warehouse_id}`)
       .then((response) => {
-        console.log(response.data)
-      const {sku, description, qty} = response.data[0]
-      const unit = +response.data[0].price
-      let newInventory = row.slice().push(response.data);
-      setRow(newInventory)
-      let newArray = row.splice()
-      newArray.push(createRow(sku, description, qty, unit))
-      setRow(newArray)
-
+      const {sku, description, qty} = response.data[0];
+      const unit = +response.data[0].price;
+      let newArray = itemList.slice();
+      newArray.push(addItem(sku, description, qty, unit));
+      setItemList(newArray);
     })
     .catch((error) => {
       console.log(error)
     })
-  }
-
-  const invoiceTaxes = tax * invoiceSubtotal;
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+  };
 
   const onDelete = (index) => {
-    let newArray = row.slice()
+    let newArray = itemList.slice()
     newArray.splice(index, 1)
-    setRow(newArray)
-  }
+    setItemList(newArray)
+  };
+
   const editQty = (e,i) => {
-    let newArray = row.slice()
-    let newRow = newArray[i]
-    newRow.qty = e.target.value
-    newRow.price = newRow.qty * newRow.unit
-    setRow(newArray)
-  }
+    let newArray = itemList.slice()
+    let newitemList = newArray[i]
+    newitemList.qty = e.target.value
+    newitemList.price = newitemList.qty * newitemList.unit
+    setItemList(newArray)
+  };
+
+  // const submitInvoice = () => {
+  //   const invoiceObject = {
+  //     warehouse_id,
+  //     company_id, 
+  //     // user_id, being pulled off the session. 
+
+  //     // FIXME: not sure where to get customer_id from
+  //     // customer_id, 
+  //     category: 'invoice', 
+  //     subtotal,
+  //     tax, 
+  //     total, 
+  //     // payment, 
+  //     // pdf
+  //   }; 
+
+  //   const sale_details = itemList; 
+
+  //   axios.post('/api/sales', {invoiceObject, sale_details})
+  //     .then(response => {
+  //       console.log(response)
+  //     })
+  //     .catch(err => console.log(err))
+  // }; 
+
   return (
     <Paper className={classes.paper}>
       <TextField onChange={e => setSku(e.target.value)} label='Search...' type='search' id='filled-search' className={classes.TextField}></TextField>
@@ -147,11 +174,11 @@ const invoiceSubtotal = subtotal(rows);
           </TableRow>
         </TableHead>
         <TableBody>
-          {row.map((r, i) => (
+          {itemList.map((r, i) => (
             <TableRow key={r.desc}>
-              <div className={classes.icons} align='center'>
+              <section className={classes.icons} align='center'>
               <DeleteIcon align='right' onClick={() => onDelete(i)} className={classes.icon}></DeleteIcon>
-              </div>
+              </section>
               <TableCell>{r.sku}</TableCell>
               <TableCell>{r.desc}</TableCell>
               <TextField className={classes.qty} marginTop='none' variant='filled' onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
@@ -163,16 +190,16 @@ const invoiceSubtotal = subtotal(rows);
           <TableRow className={classes.Taxbox}>
             <TableCell rowSpan={3} />
             <TableCell align='center' colSpan={3}>Subtotal</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+            <TableCell align="right">{ccyFormat(subtotal)}</TableCell>
           </TableRow>
           <TableRow className={classes.Taxbox}>
             <TableCell className={classes.Taxbox} align='center' colSpan={2}></TableCell>
-            <TextField onChange={(e => setTax(e.target.value))} label='Tax' id="filled-number"type="decimal" className={classes.taxField} InputLabelProps={{shrink: true,}} marginTop="normal" variant='filled'/>
-            <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+            <TextField onChange={(e => setTaxRate(e.target.value))} label='Tax (%)' id="filled-number"type="decimal" className={classes.taxField} InputLabelProps={{shrink: true,}} marginTop="normal" variant='filled'/>
+            <TableCell align="right">{ccyFormat(tax)}</TableCell>
           </TableRow>
           <TableRow className={classes.Taxbox}>
             <TableCell align='center' colSpan={3}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell align="right">{ccyFormat(total)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -180,7 +207,3 @@ const invoiceSubtotal = subtotal(rows);
     </Paper>
   );
 };
-const mapStateToProps = (state) => {
-  return state;
-};
-export default connect(mapStateToProps)(SpanningTable)
