@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 import { TextField, Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -70,7 +71,14 @@ export default function CompanyRegister() {
                 zip: state.wareZip
             }
         }
-        console.log('register')
+
+        axios.post('/api/company', body)
+            .then( response => {
+                console.log(response)
+            })
+            .catch( error => {
+                console.log(error)
+            })
     }
 
     const classes = useStyles()
