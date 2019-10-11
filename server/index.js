@@ -3,11 +3,12 @@ const express = require('express');
 const cors = require('cors'); 
 const massive = require('massive'); 
 const session = require('express-session'); 
-const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files
 const authCtrl = require('./controllers/authController.js')
 const inventoryCtrl = require('./controllers/inventoryController'); 
+const nodeMailerCtrl = require('./controllers/nodeMailerController')
+const companyCtrl = require('./controllers/companyController')
 
 // Middleware Files
 
@@ -43,7 +44,6 @@ massive(CONNECTION_STRING)
 
 // Auth EndPoints
 app.post('/api/register', authCtrl.register); 
-app.post('/api/register/company', authController.registerCompany)
 app.post('/api/login', authCtrl.login);  
 app.delete('/api/logout', authCtrl.logout); 
 app.delete('/api/delete-user/:id', authCtrl.deleteUser); 
@@ -63,6 +63,9 @@ app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
 app.post('/api/inventory', inventoryCtrl.addInventory); 
 app.put('/api/inventory/:id', inventoryCtrl.editInventory); 
 app.delete('/api/inventory/:id', inventoryCtrl.deleteInventory); 
+
+// Company Endpoints
+app.post('/api/company/', companyCtrl.register)
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)
