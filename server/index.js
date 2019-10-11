@@ -3,11 +3,13 @@ const express = require('express');
 const cors = require('cors'); 
 const massive = require('massive'); 
 const session = require('express-session'); 
-const nodeMailerCtrl = require('./controllers/nodeMailerController')
 
 // Controller Files
-const authCtrl = require('./controllers/authController.js')
+const authCtrl = require('./controllers/authController.js');
 const inventoryCtrl = require('./controllers/inventoryController'); 
+const salesCtrl = require('./controllers/salesController'); 
+const nodeMailerCtrl = require('./controllers/nodeMailerController');
+
 
 // Middleware Files
 
@@ -50,11 +52,14 @@ app.put('/api/update-user/:id', authCtrl.updateUser);
 app.put('/api/update-password', authCtrl.updatePassword); 
 
 // Sales Endpoints
-app.get('/api/sales/:id',); 
-app.get('/api/sales', ); 
-app.post('/api/sales', ); 
-app.put('/api/sales/:id', );
-app.delete('/api/sales/:id', ); 
+app.get('/api/sales/:id', salesCtrl.getSingleSales); 
+app.post('/api/sales', salesCtrl.createSales); 
+app.put('/api/sales/:id', salesCtrl.editSales);
+
+// TODO: we don't need a get all sales at this time.
+// app.get('/api/sales', salesCtrl); 
+// TODO: we don't need a delete at this time. 
+// app.delete('/api/sales/:id', salesCtrl); 
 
 // Inventory Endpoints
 app.get('/api/categories/:id', inventoryCtrl.getCategories)
