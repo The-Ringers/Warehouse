@@ -30,7 +30,7 @@ const getSingleInventory = async (req, res) => {
     const { sku } = req.params; 
     const { warehouse_id } = req.query; 
 
-    const singleInventory = await db.get_inventory_by_id([sku, warehouse_id]); 
+    const singleInventory = await db.get_inventory_by_sku([sku, warehouse_id]); 
     res.status(200).send(singleInventory); 
 };
 
@@ -51,6 +51,7 @@ const addInventory = async (req, res) => {
 
 const editInventory = async (req, res) => {
     const db = req.app.get('db'); 
+    const { role } = req.session; 
     const { price, quantity, sku, description, category, inventory_id } = req.body;
 
     if(role === 'owner' || role === 'manager' || role === 'admin') {
