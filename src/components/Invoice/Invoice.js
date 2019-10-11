@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     float: 'right',
     marginRight: '5px',
+  
   },
   table: {
     minWidth: 700,
@@ -32,12 +33,19 @@ const useStyles = makeStyles(theme => ({
     width: '500px',
     height: '60px',
     fontSize: 12,
-    margin: '15px'
+    margin: '15px',
+    fontFamily: 'Alegreya Sans SC, sans-serif'
+
   },
   Button: {
     width: '100px',
     background: 'rgb(500,200,200)',
     margin: '15px',
+    fontFamily: 'Alegreya Sans SC, sans-serif'
+  },
+  Button1: {
+    width: '500px',
+    background: 'rgb(500,200,200)',
     fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   taxField: {
@@ -49,7 +57,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: '12px'
   },
   qty: {
-    width: '60px'
+    width: '60px',
+  },
+  TableRow: {
+    fontFamily: 'Alegreya Sans SC, sans-serif'
+
   }
   
 }));
@@ -71,40 +83,33 @@ function subtotal(items) {
   return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
 }
 
-const rows = [
-  createRow('this is a sku', 'Paperclips (Box)', 150, 1.16),
-  createRow('this is a sku', 'Paperdclips (Box)', 102, 1.17),
-  createRow('this is a sku', 'Papersclips (Box)', 103, 1.18),
-  createRow('this is a sku', 'Paperfclips (Box)', 104, 1.19),
-
-
-
-  
-];
-
-
-const invoiceSubtotal = subtotal(rows);
-
 function SpanningTable(props) {
   const classes = useStyles();
   // const [search, setSearch] = useState('');
   const [sku, setSku] = useState('');
-  const [inventory, setInventory] = useState('');
+  // const [inventory, setInventory] = useState([]);
   const [tax, setTax] = useState('');
-  const [row, setRow] = useState(rows);
+  const [row, setRow] = useState([]);
+
+const invoiceSubtotal = subtotal(rows);
+
 
   
   const getInventory = () => {
     const {warehouse_id} = props
-    console.log('hit')
+    console.log(sku)
+    console.log(warehouse_id)
     axios.get(`/api/inventory/${sku}?warehouse_id=${warehouse_id}`)
       .then((response) => {
-        console.log(response)
-      const {sku, description, price} = response.data[0]
-      setInventory(response.data[0])
+        console.log(response.data)
+      const {sku, description, qty} = response.data[0]
+      const unit = +response.data[0].price
+      let newInventory = row.slice().push(response.data);
+      setRow(newInventory)
       let newArray = row.splice()
-      newArray.push(createRow(sku, description, price))
+      newArray.push(createRow(sku, description, qty, unit))
       setRow(newArray)
+
     })
     .catch((error) => {
       console.log(error)
@@ -124,8 +129,6 @@ function SpanningTable(props) {
     let newRow = newArray[i]
     newRow.qty = e.target.value
     newRow.price = newRow.qty * newRow.unit
-    console.log(e.target.value)
-    console.log(row)
     setRow(newArray)
   }
   return (
@@ -134,7 +137,7 @@ function SpanningTable(props) {
       <Button className={classes.Button} onClick={getInventory}>Add Item</Button>
       <Table className={classes.table}>
         <TableHead>
-          <TableRow>
+          <TableRow className={classes.TableRow}>
             <TableCell align='right'></TableCell>
             <TableCell align=''>SKU</TableCell>
             <TableCell>Desciption</TableCell>
@@ -151,7 +154,7 @@ function SpanningTable(props) {
               </div>
               <TableCell>{r.sku}</TableCell>
               <TableCell>{r.desc}</TableCell>
-              <TextField className={classes.qty} onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
+              <TextField className={classes.qty} marginTop='none' variant='filled' onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
               <TableCell>{r.unit}</TableCell>
               <TableCell>{ccyFormat(r.price)}</TableCell>
             </TableRow>
@@ -173,6 +176,7 @@ function SpanningTable(props) {
           </TableRow>
         </TableBody>
       </Table>
+      <Button className={classes.Button1} onClick={''}>Submit</Button>
     </Paper>
   );
 };
