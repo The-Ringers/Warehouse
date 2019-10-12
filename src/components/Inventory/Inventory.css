@@ -19,7 +19,6 @@
     border-bottom: 1px solid rgb(218, 218, 218);
     font-size: 24px;
     font-weight: bold;
-    padding: 24px;
     box-sizing: border-box;
 }
 
@@ -29,7 +28,6 @@
     width: 100%;
     display: flex;
     background: #e5e5e5;
-    padding: 24px;
     box-sizing: border-box;
 }
 
@@ -39,34 +37,13 @@
     width: 100%;
     display: flex;
     background: white;
-    padding: 24px;
     box-sizing: border-box;
 }
 
-.cell1{
-    width: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#dark{
+    background: #e5e5e5;
 }
 
-.cell2{
-    width: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.cell3{
-    width: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.cell4{
-    width: 10%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#material-table{
+    width: 100%;
 }

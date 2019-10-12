@@ -10,6 +10,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import MaterialTable from 'material-table';
 
 // Stylesheets
 import './Inventory.css';
@@ -65,26 +68,70 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  cell1: {
+    width: '5%',
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: '18px'
+  },
+  cell2: {
+    width: '15%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: '18px'
+  },
+  cell3: {
+    width: '55%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: '18px'
+  },
+  cell4: {
+    width: '12.5%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: '18px'
+  },
+  cell5: {
+    width: '12.5%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: `1px solid ${theme.palette.divider}`,
+    fontSize: '18px'
   }
 }));
 
 function Inventory(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [inventory, setInventory] = React.useState([])
+  const [inventory, setInventory] = React.useState([]);
 
   const mappedCategories = props.categories.map((element, index) => {
-    return <Tab key={index} label={element.category} {...a11yProps(0)} />
+    return <Tab id={index === value ? 'dark' : null} key={index} label={element.category} {...a11yProps(index)} />
   })
 
   const mappedInventory = inventory.map((element, index)=> {
     return (
       <TabPanel className={classes.panel} key={index} value={value} index={value}>
         <section className={index % 2 === 0 ? 'inventory-table-even' : 'inventory-table-odd'}>
-          <p className='cell1'>{element.sku}</p>
-          <p className='cell2'>{element.description}</p>
-          <p className='cell3'>{element.quantity}</p>
-          <p className='cell4'>{element.price}</p>
+          <p className={classes.cell2}>{element.sku}</p>
+          <p className={classes.cell3}>{element.description}</p>
+          <p className={classes.cell4}>{element.quantity}</p>
+          <p className={classes.cell5}>{element.price}</p>
+          <div className={classes.cell1}>
+            <EditIcon />
+            <DeleteIcon />
+          </div>
         </section>
       </TabPanel>
     )
@@ -117,10 +164,11 @@ function Inventory(props) {
       </Tabs>
       <div>
         <section className='inventory-header'>
-          <p className='cell1'>SKU</p>
-          <p className='cell2'>Description</p>
-          <p className='cell3'>Qty.</p>
-          <p className='cell4'>Unit Price</p>
+          <p className={classes.cell2}>SKU</p>
+          <p className={classes.cell3}>Description</p>
+          <p className={classes.cell4}>Qty.</p>
+          <p className={classes.cell5}>Unit Price</p>
+          <p className={classes.cell1} />
         </section>
         <section className='inventory-margin' />
         {inventory ? mappedInventory : null}
