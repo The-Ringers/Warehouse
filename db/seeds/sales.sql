@@ -9,5 +9,5 @@ CREATE TABLE sales (
     subtotal DECIMAL NOT NULL CONSTRAINT positive_subtotal CHECK (subtotal > 0),
     tax DECIMAL NOT NULL CONSTRAINT positive_tax CHECK (tax > 0),
     total DECIMAL NOT NULL CONSTRAINT positive_total CHECK (total > 0),
-    pdf BLOB
+    pdf BYTEA
 );
