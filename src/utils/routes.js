@@ -6,7 +6,8 @@ import Dashboard from '../components/Dashboard/Dashboard';
 import Contact from '../components/Contact/Contact';
 import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
-import Order from '../components/Order/Order'
+import Order from '../components/Order/Order';
+import Search from '../components/Search/Search'; 
 
 
 export default (
@@ -17,6 +18,7 @@ export default (
         <Route path='/:company/invoice/:id' component={Invoice}/>
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
+        <Route path='/:company/search/:id' component={Search}/> 
 
     </Switch>
 )

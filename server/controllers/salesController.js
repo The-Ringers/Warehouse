@@ -1,13 +1,14 @@
 const getSingleSales = async (req, res) => {
     const db = req.app.get('db');
-    const { sales_id } = req.params; 
-    const { warehouse_id } = req.query;
+    const sales_id = req.params.id; 
+    const warehouse_id = +req.query.warehouse_id;
 
     const singleSale = await db.get_sale([sales_id]); 
-    const sale_warehouse_id = singleSale.warehouse_id;
+    const sale_warehouse_id = singleSale[0].warehouse_id;
 
     if(warehouse_id === sale_warehouse_id) {
-        res.status(200).send(singleSale); 
+        const sale_details = await db.get_sale_details([sales_id])
+        res.status(200).send({singleSale, sale_details}); 
     }
     else {
         res.status(403).send('Acess denied.'); 
