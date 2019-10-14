@@ -32,6 +32,10 @@ function Sidebar(props) {
         props.history.push(`/${props.company.name}/search`)
     }
 
+    const routeToCompanyRegister = () => {
+        props.history.push('/register-company')
+    }
+
     const logoutUser = () => {
         axios.delete('/api/logout').then(() => {
             props.wipeRedux()
@@ -50,6 +54,12 @@ function Sidebar(props) {
                 <button className={props.location.pathname === `/${props.company.name}/quote` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
                 <button className={props.location.pathname === `/${props.company.name}/inventory` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
                 <button className={props.location.pathname === `/${props.company.name}/search` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
+                {
+                    props.role === 'admin' ?
+                    <button className={props.location.pathname === '/register-company' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToCompanyRegister}>Company Register</button>
+                    :
+                    null
+                }
             </section>
             <section>
                 <button className='sidebar-logout' onClick={logoutUser}>Logout</button>
