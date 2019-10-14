@@ -1,9 +1,17 @@
 const getSingleSales = async (req, res) => {
     const db = req.app.get('db');
     const { sales_id } = req.params; 
+    const { warehouse_id } = req.query;
 
     const singleSale = await db.get_sale([sales_id]); 
-    res.status(200).send(singleSale); 
+    const sale_warehouse_id = singleSale.warehouse_id;
+
+    if(warehouse_id === sale_warehouse_id) {
+        res.status(200).send(singleSale); 
+    }
+    else {
+        res.status(403).send('Acess denied.'); 
+    }
 }; 
 
 // TODO: we don't need a get all sales at this time. 
