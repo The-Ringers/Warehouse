@@ -72,6 +72,7 @@ export default function CompanyRegister() {
             }
         }
 
+        console.log(state, body)
         axios.post('/api/company', body)
             .then( response => {
                 console.log(response)
