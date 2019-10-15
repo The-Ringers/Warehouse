@@ -40,7 +40,7 @@ class Dashboard extends Component {
             )
         })
         return (
-            <div>
+            <div className='dashboard-container'>
                 <div className='dashboard-margin'></div>
                 <div className='company-name'>
                     <p>{this.props.company.name}</p>
