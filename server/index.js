@@ -66,8 +66,8 @@ app.get('/api/categories/:id', inventoryCtrl.getCategories)
 app.get('/api/inventory', inventoryCtrl.searchInventory); 
 app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
 app.post('/api/inventory', inventoryCtrl.addInventory); 
-app.put('/api/inventory/:id', inventoryCtrl.editInventory); 
-app.delete('/api/inventory/:id', inventoryCtrl.deleteInventory); 
+app.put('/api/inventory/edit', inventoryCtrl.editInventory); 
+app.delete('/api/inventory/:inventory_id', inventoryCtrl.deleteInventory); 
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)

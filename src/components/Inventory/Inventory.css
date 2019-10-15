@@ -47,3 +47,54 @@
 #material-table{
     width: 100%;
 }
+
+.newItemContainer{
+    font-family: 'Alegreya Sans SC', sans-serif;
+    height: 50px;
+    width: calc(100vw - 500px);
+    display: flex;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    font-size: 24px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.test{
+    width: 15%;
+}
+
+.cell1{
+    width: 55%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.cell2{
+    width: 12.5%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.cell3{
+    width: 12.5%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.editModal{
+    height: 50%;
+    width: 50%;
+    background: black;
+    position: fixed;
+    top: 25%;
+    right: calc(25% - 250px);
+}
+
+.addModal{
+    height: 50%;
+    width: 50%;
+    background: chartreuse;
+    position: fixed;
+    top: 25%;
+    right: calc(25% - 250px);
+}
