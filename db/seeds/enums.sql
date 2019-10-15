@@ -17,3 +17,8 @@ CREATE TYPE payment_type AS ENUM (
   'cash',
   'check'
 );
+
+CREATE TYPE shipping_delivery_type AS enum (
+    'shipping',
+    'delivery'
+);
