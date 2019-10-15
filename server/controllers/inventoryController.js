@@ -56,7 +56,7 @@ const editInventory = async (req, res) => {
     const { price, quantity, sku, description, category, inventory_id } = req.body;
 
     if(role === 'owner' || role === 'manager' || role === 'admin') {
-        await db.edit_inventory_details([price, quantity, sku, description, category, inventory_id]);
+        await db.edit_inventory_details([price, +quantity, sku, description, category, inventory_id]);
         res.status(200).send('')
     }
 
@@ -67,7 +67,7 @@ const editInventory = async (req, res) => {
 
 const deleteInventory = async (req, res) => {
     const db = req.app.get('db'); 
-    const inventory_id = +req.params.invetory_id; 
+    const inventory_id = +req.params.inventory_id; 
     const { role } = req.session; 
 
     if(role === 'owner' || role === 'manager' || role === 'admin') {

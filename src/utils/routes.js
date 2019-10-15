@@ -4,11 +4,12 @@ import { Switch, Route } from 'react-router-dom';
 import Landing from '../components/Landing/Landing';
 import Dashboard from '../components/Dashboard/Dashboard';
 import Contact from '../components/Contact/Contact';
+
 import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
-import Order from '../components/Order/Order';
+import Order from '../components/Order/Order'
 import Search from '../components/Search/Search'; 
-
+import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
 
 export default (
     <Switch>
@@ -19,6 +20,6 @@ export default (
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
         <Route path='/:company/search/:id' component={Search}/> 
-
+        <Route path='/register-company' component={CompanyRegister} />
     </Switch>
 )

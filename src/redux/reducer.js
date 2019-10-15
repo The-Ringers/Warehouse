@@ -48,7 +48,6 @@ export default function reducer(state = initialState, action){
             const { user_id, first_name, last_name, role, email, warehouses, company } = action.payload
             return Object.assign({}, state, {user_id, first_name, last_name, role, email, warehouses, company})
         case ADD_WAREHOUSE_ID:
-            console.log(action.payload.warehouse_id)
             return Object.assign({}, state, {warehouse_id: action.payload.warehouse_id})
         case ADD_CATEGORIES:
             return Object.assign({}, state, {categories: action.payload.categories})

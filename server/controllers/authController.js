@@ -138,5 +138,5 @@ module.exports = {
     logout, 
     deleteUser, 
     updateUser,
-    updatePassword
+    updatePassword,
 };
