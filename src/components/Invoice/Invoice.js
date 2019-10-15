@@ -135,7 +135,8 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
   },
   backButton: {
-    marginRight: theme.spacing(1),
+    width: '150px',
+    alignSelf: 'center'
   },
   modalInput: {
     width: '500px',
@@ -167,6 +168,14 @@ export default function Invoice(props) {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedValue, setSelectedValue] = useState('a')
   const [values, setValues] = useState('')
+  const [category] = useState('invoice')
+  const [paymentType, setPaymentType] = useState('');
+  const [first_name, setFirst_name] = useState('');
+  const [last_name, setLast_name] = useState('');
+  const [company, setCompany] = useState(''); 
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  
   const subtotal = calculateSubtotal(itemList);
   const tax = (taxRate/100) * subtotal;
   const total = tax + subtotal;
@@ -205,6 +214,7 @@ export default function Invoice(props) {
       let newArray = itemList.slice();
       newArray.push(addItem(sku, description, qty, unit));
       setItemList(newArray);
+      console.log(itemList)
     })
     .catch((error) => {
       console.log(error)
@@ -225,30 +235,34 @@ export default function Invoice(props) {
     setItemList(newArray)
   };
 
-  // const submitInvoice = () => {
-  //   const invoiceObject = {
-  //     warehouse_id,
-  //     company_id, 
-  //     // user_id, being pulled off the session. 
+  const submitSale = () => {
+    const saleObject = {
+      warehouse_id,
+      user_id,
+      company_id, 
+      category, 
+      subtotal,
+      tax, 
+      total, 
+      paymentType
+      // pdf
+    }; 
 
-  //     // FIXME: not sure where to get customer_id from
-  //     // customer_id, 
-  //     category: 'invoice', 
-  //     subtotal,
-  //     tax, 
-  //     total, 
-  //     // payment, 
-  //     // pdf
-  //   }; 
+    // const shippingObject = {
+    //   address,
+    //   city,
+    //   state,
+    //   zip 
+    // };
 
-  //   const sale_details = itemList; 
+    const sale_details = itemList; 
 
-  //   axios.post('/api/sales', {invoiceObject, sale_details})
-  //     .then(response => {
-  //       console.log(response)
-  //     })
-  //     .catch(err => console.log(err))
-  // }; 
+    axios.post('/api/sales', {saleObject, sale_details})
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => console.log(err))
+  }; 
   const handleChange = event => {
     setSelectedValue(event.target.value);
   };
@@ -262,7 +276,8 @@ export default function Invoice(props) {
   
   const case0 = () => {
     return  <div className={classes.modalInputs} >
-              <TextField className={classes.modalInput} label='Name' variant='filled' ></TextField>
+              <TextField className={classes.modalInput} label='First Name' variant='filled' ></TextField>
+              <TextField className={classes.modalInput} label='Last Name' variant='filled' ></TextField>
               <TextField className={classes.modalInput} label='Company' variant='filled' ></TextField>
               <TextField className={classes.modalInput} label='Email' variant='filled' ></TextField>
               <TextField className={classes.modalInput} label='Phone #' variant='filled' ></TextField>
@@ -331,7 +346,7 @@ export default function Invoice(props) {
   return (
     <ThemeProvider theme={theme}>
     <Paper className={classes.paper}>
-      <TextField onChange={e => setSku(e.target.value)} label='Search...' type='search' id='filled-search' className={classes.TextField}></TextField>
+      <TextField onChange={e => setSku(e.target.value)} label='Search Inventory...' type='search' id='filled-search' className={classes.TextField}></TextField>
       <Button className={classes.Button} onClick={getInventory}>Add Item</Button>
       <Table className={classes.table}>
         <TableHead>
