@@ -43,8 +43,13 @@ const editEmployee = async (req, res) => {
     res.status(200).send()
 }
 
-const deleteEmployee = (req, res) => {
+const deleteEmployee = async (req, res) => {
     console.log('hit delete employee')
+
+    const db = req.app.get('db')
+    const { id } = req.params
+
+    await db.delete_user([id])
     res.status(200).send()
 }
 
