@@ -9,6 +9,7 @@ import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
+import EmployeeManage from '../components/EmployeeManage/EmployeeManage'
 
 export default (
     <Switch>
@@ -19,5 +20,6 @@ export default (
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
         <Route path='/register-company' component={CompanyRegister} />
+        <Route path='/:company/:warehouse/employees' component={EmployeeManage} />
     </Switch>
 )
