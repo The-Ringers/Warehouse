@@ -10,17 +10,72 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+
+const columns = [
+    { id: 'sku', label: 'SKU', minWidth: 170 },
+    { id: 'description', label: 'Description', minWidth: 100 },
+    { id: 'amount', label: 'Quantity', minWidth: 170, align: 'right', format: value => value.toLocaleString()},
+    { id: 'price', label: 'Unit Price', minWidth: 100 },
+    { id: 'itemTotalCalc', label: 'Total Amount', minWidth: 170, align: 'right', format: value => value.toLocaleString()}
+]
+  
+function createData(sku, description, amount, price) {
+const itemTotalCalc = parseFloat(price * amount).toFixed(2); 
+return { sku, description, amount, price, itemTotalCalc };
+}
+  
+const useStyles = makeStyles({
+    root: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
+    },
+    tableWrapper: {
+    },
+    date: {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '250px'
+    },
+    setDate: {
+        width: '250px'
+    },
+    document: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    formContainer: {
+        display: 'flex',
+        justifyContent: 'space-evenly',
+        width: '100%',
+    }
+})
 
 export default function Search() {
     // Hooks
-    const [saleID, setSaleID] = useState(0); 
+    const [saleID, setSaleID] = useState(null); 
     const [renderSale, setRenderSale] = useState(false);
     const [saleDetails, setSaleDetails] = useState([]);
     const [saleCategoryInfo, setCategoryInfo] = useState({}); 
-    const [customerInfo, setCustomerInfo] = useState({}); 
+    const [customerInfo, setCustomerInfo] = useState({});
+    const [startDate, setStartDate] = React.useState(new Date().setHours(0,0,0,0));
+    const [endDate, setEndDate] = React.useState(startDate);
+    const [documentType, setDocumentType] = React.useState('')
 
+    console.log(startDate)
+    console.log(new Date(startDate).getTime() / 1000)
+
+    const classes = useStyles();
 
     // Redux 
     const warehouse_id = useSelector(state => state.warehouse_id)
@@ -28,8 +83,11 @@ export default function Search() {
     const searchSaleID = () => {
         axios.get(`/api/sales/${saleID}?warehouse_id=${warehouse_id}`)
             .then(response => {
+                const newSaleDetails = response.data.sale_details.map(sale => {
+                    return createData(sale.sku, sale.description, sale.amount, sale.price)
+                })
                 setRenderSale(true);
-                setSaleDetails(response.data.sale_details);
+                setSaleDetails(newSaleDetails);
                 setCategoryInfo(response.data.singleSale[0]); 
                 setCustomerInfo(response.data.customer_info[0])
                 console.log(response.data);
@@ -37,21 +95,9 @@ export default function Search() {
             .catch(err => console.log(err))
     }; 
 
-    const mappedSales = saleDetails.map((sale, index) => {
-        const itemTotalCalc = parseFloat(sale.price * sale.amount).toFixed(2); 
-        return(
-            <div key={index} className='item-list'>
-                <p>Item: {sale.description}</p>
-                <p>Total: ${itemTotalCalc}</p>
-                <p>Qty: {sale.amount}</p>
-                <p>Sku: {sale.sku}</p>
-            </div>
-        )
-    }); 
-
     return (
        <div className='outer-container'>
-            <div className='sale-search-box'>
+            {/* <div className='sale-search-box'>
                 <input
                     className='saleId-input-box'
                     placeholder='Enter SaleID'
@@ -59,32 +105,128 @@ export default function Search() {
                     onChange={(e) => setSaleID(+e.target.value)}
                 /> 
                 <button className='search-button' onClick={searchSaleID}>Search</button>
+            </div> */}
+            <div className={classes.formContainer}>
+                <section className={classes.document}>
+                    <TextField
+                        id="standard-name"
+                        label="Document #"
+                        value={saleID}
+                        onChange={e => setSaleID(e.target.value)}
+                    />
+                    <FormControl className={classes.formControl}>
+                        <InputLabel htmlFor="age-simple">Type</InputLabel>
+                        <Select
+                            value={documentType}
+                            onChange={e => setDocumentType(e.target.value)}
+                            inputProps={{
+                                name: 'age',
+                                id: 'age-simple',
+                            }}
+                        >
+                            <MenuItem value='invoice'>Invoice</MenuItem>
+                            <MenuItem value='order'>Order</MenuItem>
+                            <MenuItem value='quote'>Quote</MenuItem>
+                        </Select>
+                    </FormControl>
+                </section>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <Grid container className={classes.date}>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            id="date-picker-inline"
+                            label="Start Date"
+                            value={startDate}
+                            onChange={date => setStartDate(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            className={classes.setDate}
+                        />
+                        <KeyboardDatePicker
+                            disableToolbar
+                            variant="inline"
+                            format="MM/dd/yyyy"
+                            id="date-picker-inline"
+                            label="End Date"
+                            value={endDate}
+                            onChange={date => setEndDate(date)}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                            className={classes.setDate}
+                        />
+                    </Grid>
+                </MuiPickersUtilsProvider>
+                <section>
+                    <button onClick={searchSaleID}>Search</button>
+                </section>
             </div>
-            <div className='sale-info-container'>
-                {!renderSale 
-                ? (<div></div> )
-                : 
-                (<div>
-                    <div>
-                        <p>Category: {saleCategoryInfo.category}</p>
-                        <p>Payment Type: {saleCategoryInfo.payment}</p>
-                        <p>Subtotal: ${saleCategoryInfo.subtotal}</p>
-                        <p>Tax: ${saleCategoryInfo.tax}</p>
-                        <p>Total: ${saleCategoryInfo.total}</p>
+            {!renderSale 
+            ? (<div></div> )
+            : 
+            <>
+                <div>
+                    <p>Name: {customerInfo.first_name} {customerInfo.last_name}</p>
+                    <p>Company Name: {customerInfo.company_name}</p>
+                    <p>Email: {customerInfo.email}</p>
+                    <p>Phone: {customerInfo.phone}</p>
+                    <p>Address: {customerInfo.address} {customerInfo.city} {customerInfo.state} {customerInfo.zip}</p>
+                </div>
+                <Paper className={classes.root}>
+                    <div className={classes.tableWrapper}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                        <TableRow>
+                            {columns.map(column => (
+                            <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{ minWidth: column.minWidth }}
+                            >
+                                {column.label}
+                            </TableCell>
+                            ))}
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {saleDetails.map(row => {
+                            return (
+                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                {columns.map(column => {
+                                const value = row[column.id];
+                                return (
+                                    <TableCell key={column.id} align={column.align}>
+                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                    </TableCell>
+                                );
+                                })}
+                            </TableRow>
+                            );
+                        })}
+                        {}
+                        <TableRow>
+                            <TableCell rowSpan={3} />
+                            <TableCell colSpan={2}>Subtotal</TableCell>
+                            <TableCell align="right">{saleCategoryInfo.subtotal}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Tax</TableCell>
+                            <TableCell align="right">{`${((saleCategoryInfo.tax / saleCategoryInfo.total) * 100).toFixed(0)} %`}</TableCell>
+                            <TableCell align="right">{saleCategoryInfo.tax}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell colSpan={2}>Total</TableCell>
+                            <TableCell align="right">{saleCategoryInfo.total}</TableCell>
+                        </TableRow>
+                        </TableBody>
+                    </Table>
                     </div>
-                    <div>
-                        <p>Name: {customerInfo.first_name} {customerInfo.last_name}</p>
-                        <p>Company Name: {customerInfo.company_name}</p>
-                        <p>Email: {customerInfo.email}</p>
-                        <p>Phone: {customerInfo.phone}</p>
-                        <p>Address: {customerInfo.address} {customerInfo.city} {customerInfo.state} {customerInfo.zip}</p>
-                    </div>
-                    {mappedSales}
-                    <div>
-                    </div>
-                </div>)
-                }
-            </div>
+                </Paper>
+            </>
+            }
        </div>
     )
 };
