@@ -5,7 +5,6 @@ import './Warehouse.css'
 
 export default class Warehouse extends Component {
     render() {
-        console.log(this.props.warhouse_id)
         return (
             <div className='warehouse-main' onClick={() => this.props.warehouseIdToRedux(this.props.warehouse.warehouse_id)}>
                 <section className='warehouse-title'>
