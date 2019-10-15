@@ -12,9 +12,11 @@ const getSingleSales = async (req, res) => {
 // };
 
 const createSales = async (req, res) => {
-    const { warehouse_id, customer_id, user_id, company_id, category, payment, subtotal, tax, total, pdf } = req.body; 
+    const { warehouse_id, customer_id, user_id, company_id, category, payment, subtotal, tax, total } = req.body.saleObject; 
+    const { sales_details } = req.body; 
     const db = req.app.get('db');
-    await db.create_sale([warehouse_id, company_id, user_id, customer_id, category, payment, subtotal, tax, total, pdf]);
+    await sales_details.map()
+    await db.create_sale([warehouse_id, company_id, user_id, customer_id, category, payment, subtotal, tax, total]);
 };
 
 const editSales = async (req, res) => {

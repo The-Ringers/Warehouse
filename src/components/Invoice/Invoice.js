@@ -169,16 +169,24 @@ export default function Invoice(props) {
   const [selectedValue, setSelectedValue] = useState('a')
   const [values, setValues] = useState('')
   const [category] = useState('invoice')
-  const [paymentType, setPaymentType] = useState('');
-  const [first_name, setFirst_name] = useState('');
-  const [last_name, setLast_name] = useState('');
-  const [company, setCompany] = useState(''); 
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   
   const subtotal = calculateSubtotal(itemList);
   const tax = (taxRate/100) * subtotal;
   const total = tax + subtotal;
+  const [paymentType, setPaymentType] = useState('');
+
+  // Shipping Data
+  const [address, setAddress] = useState(''); 
+  const [city, setCity] = useState(''); 
+  const [state, setStates] = useState(''); 
+  const [zip, setZip] = useState(''); 
+
+  // Customer Info 
+  const [first_name, setFirst_name] = useState('');
+  const [last_name, setLast_name] = useState('');
+  const [company_name, setCompany_name] = useState(''); 
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');  
 
 // Redux 
   const warehouse_id = useSelector(state => state.warehouse_id);
@@ -236,6 +244,10 @@ export default function Invoice(props) {
   };
 
   const submitSale = () => {
+    const newDate = Date.now().setHours(0,0,0,0);
+    const date = new Date(newDate).getTime()/1000;  
+    const shipping_type = selectedValue; 
+
     const saleObject = {
       warehouse_id,
       user_id,
@@ -244,20 +256,30 @@ export default function Invoice(props) {
       subtotal,
       tax, 
       total, 
-      paymentType
+      paymentType,
+      date
       // pdf
     }; 
 
-    // const shippingObject = {
-    //   address,
-    //   city,
-    //   state,
-    //   zip 
-    // };
+    const shippingInfo = {
+      shipping_type,
+      address,
+      city,
+      state,
+      zip 
+    };
+
+    const customerInfo = {
+      first_name,
+      last_name,
+      company_name, 
+      email,
+      phone
+    }; 
 
     const sale_details = itemList; 
 
-    axios.post('/api/sales', {saleObject, sale_details})
+    axios.post('/api/sales', {saleObject, sale_details, shippingInfo, customerInfo})
       .then(response => {
         console.log(response)
       })
@@ -276,17 +298,17 @@ export default function Invoice(props) {
   
   const case0 = () => {
     return  <div className={classes.modalInputs} >
-              <TextField className={classes.modalInput} label='First Name' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='Last Name' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='Company' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='Email' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='Phone #' variant='filled' ></TextField>
+              <TextField onChange={(e) => setFirst_name(e.target.value)} className={classes.modalInput} label='First Name' variant='filled' ></TextField>
+              <TextField onChange={(e) => setLast_name(e.target.value)} className={classes.modalInput} label='Last Name' variant='filled' ></TextField>
+              <TextField onChange={(e) => setCompany_name(e.target.value)} className={classes.modalInput} label='Company' variant='filled' ></TextField>
+              <TextField onChange={(e) => setEmail(e.target.value)} className={classes.modalInput} label='Email' variant='filled' ></TextField>
+              <TextField onChange={(e) => setPhone(e.target.value)} className={classes.modalInput} label='Phone #' variant='filled' ></TextField>
             </div>
   }
   const case1 = () => {
     return  <div className={classes.modalInputs}>
               <InputLabel>Payment Type</InputLabel>
-              <Select value={values} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
+              <Select onChange={(e) => setPaymentType(e.target.value)} value={values} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
                 <MenuItem value='Credit'>Credit</MenuItem>
                 <MenuItem value='Cash'>Cash</MenuItem>
                 <MenuItem value='Check'>Check</MenuItem>
@@ -295,10 +317,10 @@ export default function Invoice(props) {
   }
   const case2 = () => {
     return  <div className={classes.modalInputs}>
-              <TextField className={classes.modalInput} label='Address' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='City' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='State' variant='filled' ></TextField>
-              <TextField className={classes.modalInput} label='Zipcode' variant='filled' ></TextField>
+              <TextField onChange={(e) => setAddress(e.target.value)} className={classes.modalInput} label='Address' variant='filled' ></TextField>
+              <TextField onChange={(e) => setCity(e.target.value)} className={classes.modalInput} label='City' variant='filled' ></TextField>
+              <TextField onChange={(e) => setStates(e.target.value)} className={classes.modalInput} label='State' variant='filled' ></TextField>
+              <TextField onChange={(e) => setZip(e.target.value)} className={classes.modalInput} label='Zipcode' variant='filled' ></TextField>
               <FormControlLabel checked={selectedValue === 'Delivery'} onChange={handleChange} value="Delivery" label='Delivery' control={<Radio color="primary" />} labelPlacement="start"/>
               <FormControlLabel checked={selectedValue === 'Shipping'} onChange={handleChange} value="Shipping" label='Shipping' control={<Radio color="primary" />} labelPlacement="start"/>
             </div>
