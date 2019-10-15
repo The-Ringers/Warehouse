@@ -5,5 +5,6 @@ CREATE TABLE inventory (
     quantity INTEGER NOT NULL,
     sku VARCHAR(12),
     description VARCHAR(140) NOT NULL,
-    category VARCHAR(20) NOT NULL
+    category VARCHAR(20) NOT NULL,
+    discontinued BOOLEAN DEFAULT false
 );
