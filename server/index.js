@@ -7,9 +7,9 @@ const session = require('express-session');
 // Controller Files
 const authCtrl = require('./controllers/authController.js');
 const inventoryCtrl = require('./controllers/inventoryController'); 
+const companyCtrl = require('./controllers/companyController')
 const salesCtrl = require('./controllers/salesController'); 
 const nodeMailerCtrl = require('./controllers/nodeMailerController');
-
 
 // Middleware Files
 
@@ -68,6 +68,9 @@ app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
 app.post('/api/inventory', inventoryCtrl.addInventory); 
 app.put('/api/inventory/edit', inventoryCtrl.editInventory); 
 app.delete('/api/inventory/:inventory_id', inventoryCtrl.deleteInventory); 
+
+// Company Endpoints
+app.post('/api/company/', companyCtrl.register)
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)
