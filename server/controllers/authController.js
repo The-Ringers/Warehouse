@@ -33,7 +33,7 @@ const login = async (req, res) => {
 
     const authedPassword = bcrypt.compareSync(password, foundUser[0].password); 
 
-    if(authedPassword) {
+    if(authedPassword && foundUser[0].active) {
         const { user_id, role } = foundUser[0]
         let warehouses
         if(role === 'owner') {
