@@ -20,6 +20,6 @@ export default (
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
         <Route path='/register-company' component={CompanyRegister} />
-        <Route path='/:company/:warehouse/employees' component={EmployeeManage} />
+        <Route path='/:company/employee/:warehouse' component={EmployeeManage} />
     </Switch>
 )
