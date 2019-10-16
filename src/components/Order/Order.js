@@ -168,7 +168,7 @@ export default function Invoice(props) {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedValue, setSelectedValue] = useState('a')
   const [values, setValues] = useState('')
-  const [category] = useState('invoice')
+  const [category] = useState('order')
   const [paymentType, setPaymentType] = useState('');
   const [first_name, setFirst_name] = useState('');
   const [last_name, setLast_name] = useState('');
