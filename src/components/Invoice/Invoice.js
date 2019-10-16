@@ -161,16 +161,15 @@ const calculateSubtotal = (items) => {
 
 export default function Invoice(props) {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
-  
   const [sku, setSku] = useState('');
   const [taxRate, setTaxRate] = useState(0);
   const [itemList, setItemList] = useState([]);
-  
-  // Sale Data 
+  const [open, setOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [selectedValue, setSelectedValue] = useState('a')
+  const [values, setValues] = useState('')
   const [category] = useState('invoice')
+  
   const subtotal = calculateSubtotal(itemList);
   const tax = (taxRate/100) * subtotal;
   const total = tax + subtotal;
@@ -287,8 +286,6 @@ export default function Invoice(props) {
       })
       .catch(err => console.log(err))
   }; 
-
-
   const handleChange = event => {
     setSelectedValue(event.target.value);
   };
