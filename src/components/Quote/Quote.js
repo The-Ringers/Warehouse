@@ -171,7 +171,7 @@ export default function Invoice(props) {
   
   // Sale Data 
   const [selectedValue, setSelectedValue] = useState('a')
-  const [category] = useState('invoice')
+  const [category] = useState('quote')
   const subtotal = calculateSubtotal(itemList);
   const tax = (taxRate/100) * subtotal;
   const total = tax + subtotal;
