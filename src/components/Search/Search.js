@@ -11,14 +11,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 
 const columns = [
     { id: 'sku', label: 'SKU', minWidth: 170 },
@@ -29,8 +21,8 @@ const columns = [
 ]
   
 function createData(sku, description, amount, price) {
-const itemTotalCalc = parseFloat(price * amount).toFixed(2); 
-return { sku, description, amount, price, itemTotalCalc };
+    const itemTotalCalc = parseFloat(price * amount).toFixed(2); 
+    return { sku, description, amount, price, itemTotalCalc };
 }
   
 const useStyles = makeStyles({
@@ -68,12 +60,6 @@ export default function Search() {
     const [saleDetails, setSaleDetails] = useState([]);
     const [saleCategoryInfo, setCategoryInfo] = useState({}); 
     const [customerInfo, setCustomerInfo] = useState({});
-    const [startDate, setStartDate] = React.useState(new Date().setHours(0,0,0,0));
-    const [endDate, setEndDate] = React.useState(startDate);
-    const [documentType, setDocumentType] = React.useState('')
-
-    console.log(startDate)
-    console.log(new Date(startDate).getTime() / 1000)
 
     const classes = useStyles();
 
@@ -97,7 +83,7 @@ export default function Search() {
 
     return (
        <div className='outer-container'>
-            {/* <div className='sale-search-box'>
+            <div className='sale-search-box'>
                 <input
                     className='saleId-input-box'
                     placeholder='Enter SaleID'
@@ -105,64 +91,6 @@ export default function Search() {
                     onChange={(e) => setSaleID(+e.target.value)}
                 /> 
                 <button className='search-button' onClick={searchSaleID}>Search</button>
-            </div> */}
-            <div className={classes.formContainer}>
-                <section className={classes.document}>
-                    <TextField
-                        id="standard-name"
-                        label="Document #"
-                        value={saleID}
-                        onChange={e => setSaleID(e.target.value)}
-                    />
-                    <FormControl className={classes.formControl}>
-                        <InputLabel htmlFor="age-simple">Type</InputLabel>
-                        <Select
-                            value={documentType}
-                            onChange={e => setDocumentType(e.target.value)}
-                            inputProps={{
-                                name: 'age',
-                                id: 'age-simple',
-                            }}
-                        >
-                            <MenuItem value='invoice'>Invoice</MenuItem>
-                            <MenuItem value='order'>Order</MenuItem>
-                            <MenuItem value='quote'>Quote</MenuItem>
-                        </Select>
-                    </FormControl>
-                </section>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container className={classes.date}>
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="MM/dd/yyyy"
-                            id="date-picker-inline"
-                            label="Start Date"
-                            value={startDate}
-                            onChange={date => setStartDate(date)}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                            className={classes.setDate}
-                        />
-                        <KeyboardDatePicker
-                            disableToolbar
-                            variant="inline"
-                            format="MM/dd/yyyy"
-                            id="date-picker-inline"
-                            label="End Date"
-                            value={endDate}
-                            onChange={date => setEndDate(date)}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change date',
-                            }}
-                            className={classes.setDate}
-                        />
-                    </Grid>
-                </MuiPickersUtilsProvider>
-                <section>
-                    <button onClick={searchSaleID}>Search</button>
-                </section>
             </div>
             {!renderSale 
             ? (<div></div> )
