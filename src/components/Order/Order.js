@@ -308,20 +308,12 @@ export default function Invoice(props) {
   }
   const case1 = () => {
     return  <div className={classes.modalInputs}>
-      <FormControlLabel checked={selectedValue === 'Paid'} onChange={handleChange} value="Paid" label='Paid' control={<Radio color="primary" />} labelPlacement="start"/>
-      <FormControlLabel checked={selectedValue === 'Unpaid'} onChange={handleChange} value="Unpaid" label='Unpaid' control={<Radio color="primary" />} labelPlacement="start"/>
-              {selectedValue === 'Unpaid' ?
-              null 
-              :
-              <>
               <InputLabel>Payment Type</InputLabel>
-              <Select value={values} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
-                <MenuItem value='Credit'>Credit</MenuItem>
-                <MenuItem value='Cash'>Cash</MenuItem>
-                <MenuItem value='Check'>Check</MenuItem>
+              <Select value={paymentType} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
+                <MenuItem value='credit'>Credit</MenuItem>
+                <MenuItem value='cash'>Cash</MenuItem>
+                <MenuItem value='check'>Check</MenuItem>
               </Select>
-              </>
-              }
             </div>
   }
   const case2 = () => {
