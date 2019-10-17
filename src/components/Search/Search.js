@@ -96,12 +96,14 @@ export default function Search() {
             ? (<div></div> )
             : 
             <>
-                <div>
-                    <p>Name: {customerInfo.first_name} {customerInfo.last_name}</p>
-                    <p>Company Name: {customerInfo.company_name}</p>
-                    <p>Email: {customerInfo.email}</p>
-                    <p>Phone: {customerInfo.phone}</p>
-                    <p>Address: {customerInfo.address} {customerInfo.city} {customerInfo.state} {customerInfo.zip}</p>
+                <div className='customer-info'>
+                    <h1>Customer Info</h1>
+                    <div>
+                        <p className='customer-info-name'>Name: {customerInfo.first_name} {customerInfo.last_name}</p>
+                        {customerInfo.company_name ? <p className='customer-info-company'>Company Name: {customerInfo.company_name}</p> : null}
+                        <p className='customer-info-email'>Email: {customerInfo.email}</p>
+                        <p className='customer-info-phone'>Phone: {customerInfo.phone}</p>
+                    </div>
                 </div>
                 <Paper className={classes.root}>
                     <div className={classes.tableWrapper}>
