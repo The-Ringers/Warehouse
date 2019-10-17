@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
+
 .outer-container {
     margin-left: 300px;
     display: flex;
@@ -46,4 +48,50 @@
     justify-content: space-evenly;
     margin-bottom: .5em;
     width: 40vw;
+}
+
+.customer-info{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Alegreya Sans SC', sans-serif;
+}
+
+.customer-info > h1{
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.customer-info > h2{
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.customer-info > div{
+    display: flex;
+    font-size: 24px;
+}
+
+.customer-info-name{
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.customer-info-company{
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.customer-info-email{
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+.customer-info-phone{
+    font-size: 18px;
 }
