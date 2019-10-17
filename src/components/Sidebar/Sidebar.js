@@ -33,7 +33,7 @@ function Sidebar(props) {
     }
 
     const routeToEmployeeManager = () => {
-        props.history.push(`/${props.company.name}/employee/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/employee/${props.warehouse_id}`)
     }
 
     const routeToDashboard = () => {
@@ -64,7 +64,7 @@ function Sidebar(props) {
                 <button className={props.location.pathname === `/${props.companies[0].name}/search/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
                 {
                     props.role === 'manager' || props.role === 'owner' ?
-                    <button className={props.location.pathname === `/${props.company.name}/employee/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToEmployeeManager}>Employee Manager</button>
+                    <button className={props.location.pathname === `/${props.companies[0].name}/employee/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToEmployeeManager}>Employee Manager</button>
                     :
                     null
                 }
