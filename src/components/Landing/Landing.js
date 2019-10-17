@@ -14,7 +14,7 @@ export default class Landing extends Component {
             <div>
                 <div className='landing-margin'></div>
                 <div className='landing-main'>
-                    <p>The #1 Manufacturing and Inventory</p>
+                    <p>The #1 Inventory</p>
                     <p>Management Software</p>
                     <button className='contact' onClick={this.routeToContact}>Contact Us</button>
                 </div>
