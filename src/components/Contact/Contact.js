@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import swal from 'sweetalert';
+
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -78,6 +80,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
 }));
+
 export default function Contact() {
     const classes = useStyles();
     const [name, setName] = useState('');
@@ -88,19 +91,27 @@ export default function Contact() {
         e.preventDefault();
         axios.post('/api/send', {name, email, message}).then((response)=>{
             if (response.data.msg === 'success'){
-                alert("Message Sent."); 
+                swal({
+                    icon: "success",
+                    title: "Message Sent", 
+                    text: "Thank you for your interest! We will be in touch with you soon."
+                  })
                 resetForm()
             }else if(response.data.msg === 'fail'){
-                alert("Message failed to send.")
+                swal({
+                    icon: "error",
+                    title: "Message Error", 
+                    text: "Please make sure that you are entering correct information."
+                  })
             }
         })
-    }
+    };
+
    const resetForm = () => {
         setName('')
         setEmail('')
         setMessage('')
-    }
-    
+    };
     
     return (
         <form id='font' className={classes.container} method='POST' noValidate autoComplete='on'>
@@ -144,4 +155,4 @@ export default function Contact() {
             </div>
         </form>
     );
-    };
+};
