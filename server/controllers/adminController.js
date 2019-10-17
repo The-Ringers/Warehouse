@@ -18,11 +18,10 @@ const addEmployee = async (req, res) => {
 
     await db.add_user_to_warehouse([warehouse_id, newUser[0].user_id])
 
-    res.status(200).send('User created successfully')
+    res.status(200).send(newUser[0])
 }
 
 const getEmployees = async (req, res) => {
-    console.log('hit get employees')
 
     const db = req.app.get('db')
     const { warehouse_id } = req.params
@@ -33,7 +32,6 @@ const getEmployees = async (req, res) => {
 }
 
 const editEmployee = async (req, res) => {
-    console.log('hit edit employee')
 
     const db = req.app.get('db')
     const { first_name, last_name, role, email } = req.body
@@ -44,7 +42,6 @@ const editEmployee = async (req, res) => {
 }
 
 const deleteEmployee = async (req, res) => {
-    console.log('hit delete employee')
 
     const db = req.app.get('db')
     const { id } = req.params
