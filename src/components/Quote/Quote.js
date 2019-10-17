@@ -161,15 +161,17 @@ const calculateSubtotal = (items) => {
 
 export default function Invoice(props) {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [values, setValues] = useState('')
+  
   const [sku, setSku] = useState('');
   const [taxRate, setTaxRate] = useState(0);
   const [itemList, setItemList] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
-  const [selectedValue, setSelectedValue] = useState('a')
-  const [values, setValues] = useState('')
-  const [category] = useState('quote')
   
+  // Sale Data 
+  const [selectedValue, setSelectedValue] = useState('a')
+  const [category] = useState('quote')
   const subtotal = calculateSubtotal(itemList);
   const tax = (taxRate/100) * subtotal;
   const total = tax + subtotal;
@@ -191,7 +193,7 @@ export default function Invoice(props) {
 // Redux 
   const warehouse_id = useSelector(state => state.warehouse_id);
   const company_id = useSelector(state => state.company.company_id);
-  const user_id = useSelector(state => state.user_id);
+  const user_id = useSelector(state => state.company.user_id)
 
   const ccyFormat = (num) => {
     return `${num.toFixed(2)}`;
@@ -201,15 +203,15 @@ export default function Invoice(props) {
     return qty * unit;
   };
 
-  const addItem = ( sku, desc, qty, unit, inventory_id) => {
+  const addItem = ( sku, desc, qty, unit) => {
     // the if statement sets the price to 0 if the qty is undefined
     if(!qty) {
       const price = priceItem(0, unit);
-      return { sku, desc, qty, unit, price, inventory_id};
+      return { sku, desc, qty, unit, price };
     }
     else {
       const price = priceItem(qty, unit);
-      return { sku, desc, qty, unit, price, inventory_id};
+      return { sku, desc, qty, unit, price };
     }
   };
 
@@ -217,11 +219,12 @@ export default function Invoice(props) {
     // const {warehouse_id} = props;
     axios.get(`/api/inventory/${sku}?warehouse_id=${warehouse_id}`)
       .then((response) => {
-      const {sku, description, qty, inventory_id } = response.data[0];
+      const {sku, description, qty} = response.data[0];
       const unit = +response.data[0].price;
       let newArray = itemList.slice();
-      newArray.push(addItem(sku, description, qty, unit, inventory_id));
+      newArray.push(addItem(sku, description, qty, unit));
       setItemList(newArray);
+      console.log(itemList)
     })
     .catch((error) => {
       console.log(error)
@@ -243,22 +246,21 @@ export default function Invoice(props) {
   };
 
   const submitSale = () => {
+    const newDate = Date.now().setHours(0,0,0,0);
+    const date = new Date(newDate).getTime()/1000;  
     const shipping_type = selectedValue; 
-
-    // Using toFixed method to round to the nearest cent 
-    const decimal_subtotal = +(subtotal).toFixed(2); 
-    const decimal_tax = +(tax).toFixed(2);
-    const decimal_total = +(total).toFixed(2); 
 
     const saleObject = {
       warehouse_id,
       user_id,
       company_id, 
       category, 
-      decimal_subtotal,
-      decimal_tax, 
-      decimal_total, 
+      subtotal,
+      tax, 
+      total, 
       paymentType,
+      date
+      // pdf
     }; 
 
     const shippingInfo = {
@@ -277,20 +279,21 @@ export default function Invoice(props) {
       phone
     }; 
 
-    // Array of items in the sale 
     const sale_details = itemList; 
 
     axios.post('/api/sales', {saleObject, sale_details, shippingInfo, customerInfo})
       .then(response => {
-        setItemList([]);
+        console.log(response)
       })
       .catch(err => console.log(err))
   }; 
+
+
   const handleChange = event => {
     setSelectedValue(event.target.value);
   };
   const handleClick = event => {
-    setPaymentType(event.target.value)
+    setValues(event.target.value)
     }
 
   function getSteps() {
@@ -309,10 +312,10 @@ export default function Invoice(props) {
   const case1 = () => {
     return  <div className={classes.modalInputs}>
               <InputLabel>Payment Type</InputLabel>
-              <Select value={paymentType} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
-                <MenuItem value='credit'>Credit</MenuItem>
-                <MenuItem value='cash'>Cash</MenuItem>
-                <MenuItem value='check'>Check</MenuItem>
+              <Select onChange={(e) => setPaymentType(e.target.value)} value={values} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
+                <MenuItem value='Credit'>Credit</MenuItem>
+                <MenuItem value='Cash'>Cash</MenuItem>
+                <MenuItem value='Check'>Check</MenuItem>
               </Select>
             </div>
   }
@@ -322,8 +325,8 @@ export default function Invoice(props) {
               <TextField onChange={(e) => setCity(e.target.value)} className={classes.modalInput} label='City' variant='filled' ></TextField>
               <TextField onChange={(e) => setStates(e.target.value)} className={classes.modalInput} label='State' variant='filled' ></TextField>
               <TextField onChange={(e) => setZip(e.target.value)} className={classes.modalInput} label='Zipcode' variant='filled' ></TextField>
-              <FormControlLabel checked={selectedValue === 'delivery'} onChange={handleChange} value="delivery" label='Delivery' control={<Radio color="primary" />} labelPlacement="start"/>
-              <FormControlLabel checked={selectedValue === 'shipping'} onChange={handleChange} value="shipping" label='Shipping' control={<Radio color="primary" />} labelPlacement="start"/>
+              <FormControlLabel checked={selectedValue === 'Delivery'} onChange={handleChange} value="Delivery" label='Delivery' control={<Radio color="primary" />} labelPlacement="start"/>
+              <FormControlLabel checked={selectedValue === 'Shipping'} onChange={handleChange} value="Shipping" label='Shipping' control={<Radio color="primary" />} labelPlacement="start"/>
             </div>
   }
   
@@ -355,7 +358,6 @@ export default function Invoice(props) {
   const handleSubmit = () => {
     setOpen(false);
     setActiveStep(0);
-    submitSale(); 
   }
 
 
@@ -391,25 +393,25 @@ export default function Invoice(props) {
               </section>
               <TableCell>{r.sku}</TableCell>
               <TableCell>{r.desc}</TableCell>
-              <TextField className={classes.qty} marginTop='none' variant='filled' type='number' onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
+              <TextField className={classes.qty} marginTop='none' variant='filled' onChange={(e) => editQty(e,i)} >{r.qty}</TextField>
               <TableCell>{r.unit}</TableCell>
-              <TableCell>${ccyFormat(r.price)}</TableCell>
+              <TableCell>{ccyFormat(r.price)}</TableCell>
             </TableRow>
           ))}
 
           <TableRow className={classes.Taxbox}>
             <TableCell rowSpan={3} />
             <TableCell align='center' colSpan={3}>Subtotal</TableCell>
-            <TableCell align="right">${ccyFormat(subtotal)}</TableCell>
+            <TableCell align="right">{ccyFormat(subtotal)}</TableCell>
           </TableRow>
           <TableRow className={classes.Taxbox}>
             <TableCell className={classes.Taxbox} align='center' colSpan={2}></TableCell>
             <TextField onChange={(e => setTaxRate(e.target.value))} label='Tax (%)' id="filled-number"type="decimal" className={classes.taxField} InputLabelProps={{shrink: true,}} marginTop="normal" variant='filled'/>
-            <TableCell align="right">${ccyFormat(tax)}</TableCell>
+            <TableCell align="right">{ccyFormat(tax)}</TableCell>
           </TableRow>
           <TableRow className={classes.Taxbox}>
             <TableCell align='center' colSpan={3}>Total</TableCell>
-            <TableCell align="right">${ccyFormat(total)}</TableCell>
+            <TableCell align="right">{ccyFormat(total)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -465,6 +467,7 @@ export default function Invoice(props) {
         </Fade>
       </Modal>
     </div>
-    </Paper></ThemeProvider>
+    </Paper>
+    </ThemeProvider>
   );
 };

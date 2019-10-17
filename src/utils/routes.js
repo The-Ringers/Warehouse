@@ -9,6 +9,7 @@ import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
+import Quote from '../components/Quote/Quote'
 
 export default (
     <Switch>
@@ -17,6 +18,7 @@ export default (
         <Route path='/:company/dashboard' component={Dashboard}/>
         <Route path='/:company/invoice/:id' component={Invoice}/>
         <Route path='/:company/inventory/:id' component={Inventory}/>
+        <Route path='/:company/quote/:id' component={Quote}/>
         <Route path='/:company/order/:id' component={Order}/>
         <Route path='/register-company' component={CompanyRegister} />
     </Switch>
