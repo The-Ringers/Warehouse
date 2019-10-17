@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import swal from 'sweetalert';
 
 // Routing
 import { withRouter } from 'react-router';
@@ -121,8 +122,12 @@ function Nav(props) {
       else{
         props.history.push('/admin/dashboard')
       }
-    }).catch(err => {
-      console.log(err)
+    }).catch(() => {
+      swal({
+        icon: "error",
+        title: "Login Error", 
+        text: "Please make sure that you are entering in valid credentials."
+      })
       setEmail('')
       setPassword('')
     })
