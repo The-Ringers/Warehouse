@@ -1,6 +1,7 @@
 .manager {
     min-height: 100vh;
     box-sizing: border-box;
+    padding-left: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,4 +10,9 @@
 
 #select-role {
     width: 201px;
+}
+
+.makeStyles-modal-503 {
+    top: 500px;
+    left: 500px;
 }
