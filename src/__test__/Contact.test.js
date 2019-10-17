@@ -2,7 +2,6 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import Contact from '../components/Contact/Contact';
 
-// Grant's Tests
 describe('Contact page loads', function () {
     //before
     it('This container will display Contact', () => {
