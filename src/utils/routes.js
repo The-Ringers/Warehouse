@@ -8,6 +8,7 @@ import Contact from '../components/Contact/Contact';
 import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
+import Search from '../components/Search/Search'; 
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
 import EmployeeManage from '../components/EmployeeManage/EmployeeManage'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
@@ -27,10 +28,8 @@ export default (
         <Route path='/register-company' component={CompanyRegister}/>
         <Route path='/:company/quote/:id' component={Quote}/>
         <Route path='/:company/order/:id' component={Order}/>
-<<<<<<< HEAD
+        <Route path='/:company/search/:id' component={Search}/> 
         <Route path='/register-company' component={CompanyRegister} />
         <Route path='/:company/employee/:warehouse' component={EmployeeManage} />
-=======
->>>>>>> master
     </Switch>
 )
