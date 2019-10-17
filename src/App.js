@@ -28,7 +28,15 @@ function App(props) {
         ? 
         <Nav /> 
         : 
-        props.location.pathname === `/${props.company.name}/dashboard`
+        props.location.pathname === `/admin/dashboard`
+        ?
+        <Nav />
+        :
+        props.location.pathname === `/company/dashboard`
+        ?
+        <Nav />
+        :
+        props.location.pathname === `/${props.companies[0].name}/dashboard`
         ?
         <Nav />
         :

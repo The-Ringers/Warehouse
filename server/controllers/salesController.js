@@ -24,11 +24,43 @@ const getSingleSales = async (req, res) => {
 // };
 
 const createSales = async (req, res) => {
-    const { warehouse_id, customer_id, user_id, company_id, category, payment, subtotal, tax, total } = req.body.saleObject; 
-    const { sales_details } = req.body; 
     const db = req.app.get('db');
-    await sales_details.map()
-    await db.create_sale([warehouse_id, company_id, user_id, customer_id, category, payment, subtotal, tax, total]);
+    
+    const { warehouse_id, user_id, company_id, category, paymentType, decimal_subtotal, decimal_tax, decimal_total } = req.body.saleObject; 
+
+    const { first_name, last_name, company_name, email, phone} = req.body.customerInfo; 
+
+    // Adding customer information to the DB 
+    const customerCreation = await db.create_customers([first_name, last_name, company_name, email, phone])
+    
+    // Adding sale information to the DB
+    const { customer_id } = customerCreation[0]; 
+    const salesCreation = await db.create_sale([warehouse_id, company_id, user_id, customer_id, category, paymentType, decimal_subtotal, decimal_tax, decimal_total]);
+    
+    // Mapping over sale_details array to store info into the DB 
+    const { sale_details } = req.body; 
+    const { sales_id }= salesCreation[0]; 
+    const saleMapping = await sale_details.map(sales => {
+        const { inventory_id, qty, sku } = sales; 
+        db.create_sale_details([sales_id, inventory_id, qty])
+
+        if(category === 'invoice') {
+            const updateQuantity = async () => {
+                const getOldQuanity = await db.get_inventory_by_sku([sku, warehouse_id])
+                const { quantity } = getOldQuanity[0]; 
+                newQuantity = quantity - qty; 
+                db.edit_inventory_quantity([newQuantity, sku])
+            }; 
+
+            updateQuantity(); 
+        }
+    }); 
+    
+    // Storing shipping information 
+    const { shipping_type, address, city, state, zip } = req.body.shippingInfo;  
+    const addingShipping = await db.add_shipping_delivery([first_name, last_name, address, city, state, zip, sales_id, shipping_type]); 
+
+    res.status(200).send('Sale added to the DB');
 };
 
 const editSales = async (req, res) => {

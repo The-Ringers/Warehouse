@@ -13,27 +13,27 @@ import './Sidebar.css';
 
 function Sidebar(props) {
     const routeToInvoice = () => {
-        props.history.push(`/${props.company.name}/invoice/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/invoice/${props.warehouse_id}`)
     }
 
     const routeToOrder = () => {
-        props.history.push(`/${props.company.name}/order/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/order/${props.warehouse_id}`)
     }
 
     const routeToQuote = () => {
-        props.history.push(`/${props.company.name}/quote/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/quote/${props.warehouse_id}`)
     }
 
     const routeToInventory = () => {
-        props.history.push(`/${props.company.name}/inventory/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/inventory/${props.warehouse_id}`)
     }
 
     const routeToSearch = () => {
-        props.history.push(`/${props.company.name}/search/${props.warehouse_id}`)
+        props.history.push(`/${props.companies[0].name}/search/${props.warehouse_id}`)
     }
 
     const routeToDashboard = () => {
-        props.history.push(`/${props.company.name}/dashboard`)
+        props.history.push(`/${props.companies[0].name}/dashboard`)
     }
     
     const routeToCompanyRegister = () => {
@@ -53,11 +53,11 @@ function Sidebar(props) {
         <div className='sidebar-main'>
             <section>
                 <p className='sidebar-title' onClick={routeToDashboard}>Inventario</p>
-                <button className={props.location.pathname === `/${props.company.name}/invoice/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInvoice}>Invoice</button>
-                <button className={props.location.pathname === `/${props.company.name}/order/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToOrder}>Order</button>
-                <button className={props.location.pathname === `/${props.company.name}/quote/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
-                <button className={props.location.pathname === `/${props.company.name}/inventory/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
-                <button className={props.location.pathname === `/${props.company.name}/search/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
+                <button className={props.location.pathname === `/${props.companies[0].name}/invoice/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInvoice}>Invoice</button>
+                <button className={props.location.pathname === `/${props.companies[0].name}/order/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToOrder}>Order</button>
+                <button className={props.location.pathname === `/${props.companies[0].name}/quote/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
+                <button className={props.location.pathname === `/${props.companies[0].name}/inventory/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
+                <button className={props.location.pathname === `/${props.companies[0].name}/search/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
                 {
                     props.role === 'admin' ?
                     <button className={props.location.pathname === '/register-company' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToCompanyRegister}>Company Register</button>
