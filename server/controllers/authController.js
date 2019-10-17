@@ -36,14 +36,19 @@ const login = async (req, res) => {
     if(authedPassword && foundUser[0].active) {
         const { user_id, role } = foundUser[0]
         let warehouses
+        let companies
         if(role === 'owner') {
             warehouses = await db.get_company_warehouses([user_id]) // gets the warehouses that are in the company
+            companies = await db.get_company_info_by_warehouse([warehouses[0].company_id])
+        }
+        else if(role === 'admin'){
+            warehouses = await db.get_all_warehouses()
+            companies = await db.get_all_companies()
         }
         else {
             warehouses = await db.get_warehouse([user_id]) // Gets warehouse information based on the user_id
-        }
-
-        const company = await db.get_company_info_by_warehouse([warehouses[0].company_id])
+            companies = await db.get_company_info_by_warehouse([warehouses[0].company_id])
+        } 
 
         delete foundUser[0].password; 
         req.session.user_id = foundUser[0].user_id;
@@ -57,7 +62,7 @@ const login = async (req, res) => {
             first_name: foundUser[0].first_name,
             last_name: foundUser[0].last_name,
             warehouses: warehouses,
-            company: company[0]
+            companies: companies
         };
 
         res.status(200).send(accountInfo); 

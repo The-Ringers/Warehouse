@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
 
 .dashboard-container{
-    height: 100vh;
+    min-height: 100vh;
     background: #947c7c;
 }
 
@@ -28,14 +28,14 @@
 
 .dashboard-warehouses-container{
     margin-top: 50px;
-    width: 100%;
     display: flex;
     justify-content: center;
 }
 
 .dashboard-warehouses{
     min-height: 100px;
-    width: 350px;
+    width: 800px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 }

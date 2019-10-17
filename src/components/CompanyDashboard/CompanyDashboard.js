@@ -12,16 +12,9 @@ import { connect } from 'react-redux';
 import { addWarehouseId, addCategories } from '../../redux/reducer';
 
 // Stylesheets
-import './Dashboard.css'
+import './CompanyDashboard.css'
 
 class Dashboard extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            warehouses: props.warehouses          
-        }
-    }
-
     warehouseIdToRedux = (id) => {
         this.props.addWarehouseId(id)
         axios.get(`/api/categories/${id}`).then(res => {
@@ -32,18 +25,21 @@ class Dashboard extends Component {
     }
 
     render() {
-        const mappedWarehouses = this.state.warehouses.map((element, index) => {
-            return (
-                <Link key={index} to={`/${this.props.companies[0].name}/invoice/${element.warehouse_id}`} className='dashboard-link'>
-                    <Warehouse warehouse={element} company={this.props.companies[0]} warehouseIdToRedux={this.warehouseIdToRedux}/>
-                </Link>
-            )
+        console.log(this.props.company_id)
+        const mappedWarehouses = this.props.warehouses.map((element, index) => {
+            if(element.company_id === this.props.company_id){
+                return (
+                    <Link key={index} to={`/${this.props.companies[this.props.company_index].name}/invoice/${element.warehouse_id}`} className='dashboard-link'>
+                        <Warehouse warehouse={element} company={this.props.companies[this.props.company_index]} warehouseIdToRedux={this.warehouseIdToRedux}/>
+                    </Link>
+                )
+            }
         })
         return (
             <div className='dashboard-container'>
                 <div className='dashboard-margin'></div>
                 <div className='company-name'>
-                    <p>{this.props.companies[0].name}</p>
+                    <p>{this.props.companies[this.props.company_index].name}</p>
                 </div>
                 <div className='dashboard-warehouses-container'>
                     <div className='dashboard-warehouses'>{mappedWarehouses}</div>
