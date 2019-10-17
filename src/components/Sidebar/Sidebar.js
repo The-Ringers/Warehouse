@@ -39,11 +39,7 @@ function Sidebar(props) {
     const routeToDashboard = () => {
         props.history.push(`/${props.companies[0].name}/dashboard`)
     }
-    
-    const routeToCompanyRegister = () => {
-        props.history.push('/register-company')
-    }
-
+   
     const logoutUser = () => {
         axios.delete('/api/logout').then(() => {
             props.wipeRedux()
@@ -63,14 +59,8 @@ function Sidebar(props) {
                 <button className={props.location.pathname === `/${props.companies[0].name}/inventory/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInventory}>Inventory</button>
                 <button className={props.location.pathname === `/${props.companies[0].name}/search/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToSearch}>Search</button>
                 {
-                    props.role === 'manager' || props.role === 'owner' ?
+                    props.role === 'manager' || props.role === 'owner' || props.role === 'admin' ?
                     <button className={props.location.pathname === `/${props.companies[0].name}/employee/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToEmployeeManager}>Employee Manager</button>
-                    :
-                    null
-                }
-                {
-                    props.role === 'admin' ?
-                    <button className={props.location.pathname === '/register-company' ? 'selected-btn' : 'sidebar-btn'} onClick={routeToCompanyRegister}>Company Register</button>
                     :
                     null
                 }

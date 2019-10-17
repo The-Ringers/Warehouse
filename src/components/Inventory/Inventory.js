@@ -69,7 +69,7 @@ const columns = [
 ];
 
 function createData(id, sku, description, quantity, price) {
-    return { id, sku, description, quantity, price };
+    return { id, sku, description, quantity, price: `$${price}` };
 }
 
 const useStyles = makeStyles(theme => ({
@@ -189,14 +189,12 @@ function Inventory(props) {
         .then(res => {
           console.log(res.data)
           const newData = res.data.map(element => {
-              return createData(element.inventory_id, element.sku, element.description, element.quantity, element.price)
+              return createData(element.inventory_id, element.sku, element.description, element.quantity, parseFloat(element.price).toFixed(2))
           })
           setInventory(newData)
         })
     }
   }, [value])
-
-  console.log(inventory)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
