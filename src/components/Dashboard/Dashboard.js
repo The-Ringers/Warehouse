@@ -25,6 +25,7 @@ class Dashboard extends Component {
     warehouseIdToRedux = (id) => {
         this.props.addWarehouseId(id)
         axios.get(`/api/categories/${id}`).then(res => {
+            console.log(res.data)
             this.props.addCategories(res.data)
         }).catch(err => {
             console.log(err)

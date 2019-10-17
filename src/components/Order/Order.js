@@ -190,7 +190,7 @@ export default function Invoice(props) {
 
 // Redux 
   const warehouse_id = useSelector(state => state.warehouse_id);
-  const company_id = useSelector(state => state.company.company_id);
+  const company_id = useSelector(state => state.companies[0].company_id);
   const user_id = useSelector(state => state.user_id);
 
   const ccyFormat = (num) => {
