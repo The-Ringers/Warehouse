@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 // Redux
 import { connect } from 'react-redux';
 
+// Sweet Alerts 
+import swal from 'sweetalert';
+
 // Material UI
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -207,7 +210,7 @@ function Inventory(props) {
       setDescription(inventory[id].description)
       setQuantity(inventory[id].quantity)
       setPrice(inventory[id].price)
-  }
+  };
 
   const setNewInventory = () => {
       const { category } = props.categories[value]
@@ -215,7 +218,7 @@ function Inventory(props) {
       inventory[row] = {id: inventoryID, sku, description, quantity, price}
       setEditItem(!editItem)
       axios.put('/api/inventory/edit', body)
-  }
+  };
 
   const addNewItem = () => {
       const { category } = props.categories[value]
@@ -224,17 +227,41 @@ function Inventory(props) {
       inventory.push({sku, description, quantity, price})
       setAddItem(false)
       axios.post('/api/inventory', body)
-  }
+  };
 
-  const deleteItem = (id) => {
-    const newInventory = inventory.filter((element, index) => {
-      if(index !== id){
-        return element
+  const deleteItem = (i) => {
+    swal("Are you sure that you want to delete this item?", {
+      buttons: {
+        delete: {
+          text: "Delete", 
+          value: "Delete"
+        },
+        cancel: "Cancel"
       }
     })
-    setInventory(newInventory)
-    axios.delete(`/api/inventory/${inventory[id].id}`)
-  }
+    .then((value) => {
+      switch(value) {
+        case 'Delete': 
+        const newInventory = inventory.filter((element, index) => {
+          if(index !== i){
+            return element
+          }
+        })
+        setInventory(newInventory)
+        axios.delete(`/api/inventory/${inventory[i].id}`)
+        .then(() => {
+          swal({
+            icon: "success",
+            title: "Item Deleted"
+          })
+        });
+        break; 
+
+        default: 
+        console.log('cancel');
+      }
+    })
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -292,13 +319,19 @@ function Inventory(props) {
                 </TableBody>
                 {editItem
                     ?
-                    <div className='editModal'>
-                        <input value={sku} onChange={e => setSku(e.target.value)}/>
-                        <input value={description} onChange={e => setDescription(e.target.value)}/>
-                        <input value={quantity} onChange={e => setQuantity(e.target.value)}/>
-                        <input value={price} onChange={e => setPrice(e.target.value)}/>
-                        <button onClick={() => setEditItem(!editItem)}>Cancel</button>
-                        <button onClick={setNewInventory}>Submit</button>
+                    // Edit Inventory Modal 
+                    <div className='inventoryModal'>
+                      <h2 className='modal-header'>Edit Inventory</h2>
+                        <div className='input-container'>
+                          <input value={sku} onChange={e => setSku(e.target.value)}/>
+                          <input value={description} onChange={e => setDescription(e.target.value)}/>
+                          <input value={quantity} onChange={e => setQuantity(e.target.value)}/>
+                          <input value={price} onChange={e => setPrice(e.target.value)}/>
+                        </div>
+                        <div className='btn-container'>
+                          <button className='submit-btn' onClick={setNewInventory}>Submit</button>
+                          <button className='cancel-btn' onClick={() => setEditItem(!editItem)}>Cancel</button>
+                        </div>
                     </div>
                     :
                     null
@@ -308,15 +341,23 @@ function Inventory(props) {
                 </div>
                 {addItem
                     ?
-                    <div className='addModal'>
-                        <p>{props.match.params.id}</p>
-                        <p>{props.categories[value].category}</p>
-                        <input onChange={e => setSku(e.target.value)}/>
-                        <input onChange={e => setDescription(e.target.value)}/>
-                        <input onChange={e => setQuantity(e.target.value)}/>
-                        <input onChange={e => setPrice(e.target.value)}/>
-                        <button onClick={() => setAddItem(!addItem)}>Cancel</button>
-                        <button onClick={addNewItem}>Submit</button>
+                    // Add Inventory Modal 
+                    <div className='inventoryModal'>
+                        <h2 className='modal-header'>Add Inventory</h2>
+                        <div className='header-container'>
+                          <p>Category: {props.categories[value].category}</p>
+                          <p>ID: {props.match.params.id}</p>
+                        </div>
+                        <div className='input-container'>
+                          <input placeholder='SKU'onChange={e => setSku(e.target.value)}/>
+                          <input placeholder='Description' onChange={e => setDescription(e.target.value)}/>
+                          <input placeholder='Qty' onChange={e => setQuantity(e.target.value)}/>
+                          <input placeholder='Price' onChange={e => setPrice(e.target.value)}/>
+                        </div>
+                        <div className='btn-container'>
+                          <button className='submit-btn' onClick={addNewItem}>Submit</button>
+                          <button className='cancel-btn' onClick={() => setAddItem(!addItem)}>Cancel</button>
+                        </div>
                     </div>
                     :
                     null
@@ -341,7 +382,7 @@ function Inventory(props) {
     </Paper>
     </div>
   );
-}
+};
 
 const mapStateToProps = (state) => {
     return state
