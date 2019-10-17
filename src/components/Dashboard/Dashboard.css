@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
 
+.dashboard-container{
+    height: 100vh;
+    background: #947c7c;
+}
+
 .dashboard-margin{
     height: 75px;
 }
@@ -23,14 +28,14 @@
 
 .dashboard-warehouses-container{
     margin-top: 50px;
-    margin-right: 50px;
     width: 100%;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
 }
 
 .dashboard-warehouses{
     min-height: 100px;
     width: 350px;
+    display: flex;
+    justify-content: space-around;
 }

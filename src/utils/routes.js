@@ -18,7 +18,7 @@ export default (
         <Route path='/:company/dashboard' component={Dashboard}/>
         <Route path='/:company/invoice/:id' component={Invoice}/>
         <Route path='/:company/inventory/:id' component={Inventory}/>
-        <Route path='/order' component={Order}/>
+        <Route path='/:company/order/:id' component={Order}/>
         <Route path='/register-company' component={CompanyRegister} />
         <Route path='/:company/employee/:warehouse' component={EmployeeManage} />
     </Switch>

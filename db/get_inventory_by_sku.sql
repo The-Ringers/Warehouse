@@ -1,2 +1,2 @@
 SELECT * FROM inventory
-WHERE sku = $1 AND warehouse_id = $2;
+WHERE sku = $1 AND warehouse_id = $2 AND discontinued = false;

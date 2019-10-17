@@ -36,6 +36,10 @@ function Sidebar(props) {
         props.history.push(`/${props.company.name}/employee/${props.warehouse_id}`)
     }
 
+    const routeToDashboard = () => {
+        props.history.push(`/${props.company.name}/dashboard`)
+    }
+    
     const routeToCompanyRegister = () => {
         props.history.push('/register-company')
     }
@@ -52,7 +56,7 @@ function Sidebar(props) {
     return (
         <div className='sidebar-main'>
             <section>
-                <p className='sidebar-title'>Inventario</p>
+                <p className='sidebar-title' onClick={routeToDashboard}>Inventario</p>
                 <button className={props.location.pathname === `/${props.company.name}/invoice/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToInvoice}>Invoice</button>
                 <button className={props.location.pathname === `/${props.company.name}/order/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToOrder}>Order</button>
                 <button className={props.location.pathname === `/${props.company.name}/quote/${props.warehouse_id}` ? 'selected-btn' : 'sidebar-btn'} onClick={routeToQuote}>Quote</button>
