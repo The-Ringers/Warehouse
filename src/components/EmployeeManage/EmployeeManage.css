@@ -6,3 +6,7 @@
     align-items: center;
     justify-content: center;
 }
+
+#select-role {
+    width: 201px;
+}
