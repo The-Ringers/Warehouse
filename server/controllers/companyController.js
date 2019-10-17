@@ -1,14 +1,12 @@
 const bcrypt = require('bcryptjs')
+const utils = require('../utils/userUtils')
 
 const register = async (req, res) => {
 
     const { company, owner, warehouse } = req.body
     const db = req.app.get('db')
 
-    const password = Math.random().toString(36).slice(-10)
-    console.log(password)
-    const passwordSalt = bcrypt.genSaltSync(15)
-    const passwordHash = bcrypt.hashSync(password, passwordSalt)
+    const { password, passwordHash } = utils.generatePassword()
     let user, comp, ware
 
     try {
