@@ -28,6 +28,37 @@ import { ThemeProvider } from '@material-ui/styles';
 
 const theme = createMuiTheme ({
   overrides: {
+    MuiTypography: {
+      body1: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    MuiButton: {
+      Label: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    MuiInputBase: {
+      input: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    }, 
+    MuiMenuItem: {
+      root: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    MuiFormLabel: {
+      root: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    MuiStepLabel: {
+      label: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    MuiTableCell: {
+      root: {
+      fontFamily: 'Alegreya Sans SC, sans-serif'}
+    },
+    typography: {
+      fontFamily: 'Alegreya Sans SC, sans-serif',
+    },
     MuiStepIcon: {
       root: {
         '&$completed': {
@@ -36,6 +67,9 @@ const theme = createMuiTheme ({
         '&$active': {
           color: '#947C7C',
         },
+      },
+      text: {
+      fontFamily: 'Alegreya Sans SC, sans-serif',
       }
     },
     PrivateRadioButtonIcon: {
@@ -84,16 +118,16 @@ const useStyles = makeStyles(theme => ({
   submitButton: {
     width: '100px',
     background: '#640D0D',
-    fontFamily: 'Alegreya Sans SC, sans-serif',
     color: 'white',
     alignSelf: 'flex-end',
     marginRight: '10px',
     marginTop: '40px',
-    marginBottom: '10px'
+    marginBottom: '10px',
+    fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   taxField: {
     width: '60px',
-    
+    fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   icon: {
     width: '30px',
@@ -126,7 +160,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(3)
   },
   modalInputs: {
-    padding: '100px',
+    padding: '50px',
     display: 'flex',
     flexDirection: 'column'
     
@@ -136,7 +170,8 @@ const useStyles = makeStyles(theme => ({
   },
   backButton: {
     width: '150px',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   modalInput: {
     width: '500px',
@@ -146,10 +181,14 @@ const useStyles = makeStyles(theme => ({
     width: '150px',
     background: '#640D0D',
     color: 'white',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    fontFamily: 'Alegreya Sans SC, sans-serif'
   },
   stepper: {
     background: '#640D0D'
+  },
+  MenuItem: {
+    fontFamily: 'Alegreya Sans SC, sans-serif'
   }
   
 }));
@@ -301,7 +340,7 @@ export default function Invoice(props) {
   }
   
   const case0 = () => {
-    return  <div className={classes.modalInputs} >
+    return  <div className={classes.modalInputs}>
               <TextField onChange={(e) => setFirst_name(e.target.value)} className={classes.modalInput} label='First Name' variant='filled' ></TextField>
               <TextField onChange={(e) => setLast_name(e.target.value)} className={classes.modalInput} label='Last Name' variant='filled' ></TextField>
               <TextField onChange={(e) => setCompany_name(e.target.value)} className={classes.modalInput} label='Company' variant='filled' ></TextField>
@@ -313,9 +352,9 @@ export default function Invoice(props) {
     return  <div className={classes.modalInputs}>
               <InputLabel>Payment Type</InputLabel>
               <Select onChange={(e) => setPaymentType(e.target.value)} value={values} onChange={handleClick} inputProps={{ name: 'payment',}} placeholder='Payment Type'>
-                <MenuItem value='Credit'>Credit</MenuItem>
-                <MenuItem value='Cash'>Cash</MenuItem>
-                <MenuItem value='Check'>Check</MenuItem>
+                <MenuItem className='menuItem' value='Credit'>Credit</MenuItem>
+                <MenuItem className='menuItem' value='Cash'>Cash</MenuItem>
+                <MenuItem className='menuItem' value='Check'>Check</MenuItem>
               </Select>
             </div>
   }
