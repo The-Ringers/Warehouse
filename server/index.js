@@ -8,7 +8,8 @@ const session = require('express-session');
 const authCtrl = require('./controllers/authController.js');
 const inventoryCtrl = require('./controllers/inventoryController'); 
 const companyCtrl = require('./controllers/companyController')
-const salesCtrl = require('./controllers/salesController'); 
+const salesCtrl = require('./controllers/salesController');
+const adminCtrl = require('./controllers/adminController')
 const nodeMailerCtrl = require('./controllers/nodeMailerController');
 
 // Middleware Files
@@ -62,7 +63,7 @@ app.put('/api/sales/:id', salesCtrl.editSales);
 // app.delete('/api/sales/:id', salesCtrl); 
 
 // Inventory Endpoints
-app.get('/api/categories/:id', inventoryCtrl.getCategories)
+app.get('/api/categories/id', inventoryCtrl.getCategories)
 app.get('/api/inventory', inventoryCtrl.searchInventory); 
 app.get('/api/inventory/:id', inventoryCtrl.getSingleInventory);
 app.post('/api/inventory', inventoryCtrl.addInventory); 
@@ -71,6 +72,12 @@ app.delete('/api/inventory/:inventory_id', inventoryCtrl.deleteInventory);
 
 // Company Endpoints
 app.post('/api/company/', companyCtrl.register)
+
+// Admin Endpoints
+app.post('/api/admin/employee', adminCtrl.addEmployee)
+app.get('/api/admin/employee/:warehouse_id', adminCtrl.getEmployees)
+app.put('/api/admin/employee/:id', adminCtrl.editEmployee)
+app.delete('/api/admin/employee/:id', adminCtrl.deleteEmployee)
 
 // NodeMailer Endpoints
 app.post('/api/send', nodeMailerCtrl.mail)

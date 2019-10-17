@@ -10,6 +10,7 @@ import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
 import Search from '../components/Search/Search'; 
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
+import EmployeeManage from '../components/EmployeeManage/EmployeeManage'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
 import CompanyDashboard from '../components/CompanyDashboard/CompanyDashboard'
 import Quote from '../components/Quote/Quote'
@@ -28,5 +29,7 @@ export default (
         <Route path='/:company/quote/:id' component={Quote}/>
         <Route path='/:company/order/:id' component={Order}/>
         <Route path='/:company/search/:id' component={Search}/> 
+        <Route path='/register-company' component={CompanyRegister} />
+        <Route path='/:company/employee/:warehouse' component={EmployeeManage} />
     </Switch>
 )

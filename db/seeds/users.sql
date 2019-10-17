@@ -4,5 +4,6 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     first_name VARCHAR(40),
     last_name VARCHAR(40),
-    role roles NOT NULL
+    role roles NOT NULL,
+    active BOOLEAN DEFAULT true
 );
