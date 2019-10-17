@@ -9,13 +9,10 @@ import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
-<<<<<<< HEAD
 import EmployeeManage from '../components/EmployeeManage/EmployeeManage'
-=======
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
 import CompanyDashboard from '../components/CompanyDashboard/CompanyDashboard'
 import Quote from '../components/Quote/Quote'
->>>>>>> master
 
 export default (
     <Switch>
