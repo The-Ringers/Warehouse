@@ -11,6 +11,7 @@ import Order from '../components/Order/Order'
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
 import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
 import CompanyDashboard from '../components/CompanyDashboard/CompanyDashboard'
+import Quote from '../components/Quote/Quote'
 
 export default (
     <Switch>
@@ -23,5 +24,7 @@ export default (
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
         <Route path='/register-company' component={CompanyRegister}/>
+        <Route path='/:company/quote/:id' component={Quote}/>
+        <Route path='/:company/order/:id' component={Order}/>
     </Switch>
 )
