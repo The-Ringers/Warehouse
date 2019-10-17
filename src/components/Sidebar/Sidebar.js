@@ -11,7 +11,7 @@ import { wipeRedux } from '../../redux/reducer'
 // Stylesheets
 import './Sidebar.css';
 
-function Sidebar(props) {
+export function Sidebar(props) {
     const routeToInvoice = () => {
         props.history.push(`/${props.companies[0].name}/invoice/${props.warehouse_id}`)
     }
