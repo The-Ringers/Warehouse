@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Alegreya+Sans+SC&display=swap');
+
+.admin-margin{
+    height: 75px;
+}
+
+.newcompany-btn-container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.newcompany-btn{
+    background: #640d0d;
+    outline: none;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    height: 40px;
+    width: 100px;
+    margin-right: 50px;
+    font-family: 'Alegreya Sans SC', sans-serif;
+}

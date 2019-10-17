@@ -111,11 +111,16 @@ function Nav(props) {
   const loginUser = () => {
     const body = {email, password}
     axios.post('/api/login', body).then(res => {
-      const { user_id, first_name, last_name, role, email, warehouses, company } = res.data
-      props.addUser(user_id, first_name, last_name, role, email, warehouses, company)
+      const { user_id, first_name, last_name, role, email, warehouses, companies } = res.data
+      props.addUser(user_id, first_name, last_name, role, email, warehouses, companies)
       setEmail('')
       setPassword('')
-      props.history.push(`/${company.name}/dashboard`)
+      if(res.data.role === 'owner' || res.data.role === 'manager' || res.data.role === 'employee'){
+        props.history.push(`/${companies[0].name}/dashboard`)
+      }
+      else{
+        props.history.push('/admin/dashboard')
+      }
     }).catch(err => {
       console.log(err)
       setEmail('')
