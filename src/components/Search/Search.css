@@ -61,6 +61,13 @@
 }
 
 .customer-info > h1{
+    font-size: 28px;
+    margin-bottom: 25px;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+.customer-info > h2{
     font-size: 24px;
     margin-bottom: 10px;
 }

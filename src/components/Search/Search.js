@@ -97,7 +97,8 @@ export default function Search() {
             : 
             <>
                 <div className='customer-info'>
-                    <h1>Customer Info</h1>
+                    <h1>{saleCategoryInfo.category}</h1>
+                    <h2>Customer Info</h2>
                     <div>
                         <p className='customer-info-name'>Name: {customerInfo.first_name} {customerInfo.last_name}</p>
                         {customerInfo.company_name ? <p className='customer-info-company'>Company Name: {customerInfo.company_name}</p> : null}
