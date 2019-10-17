@@ -4,6 +4,24 @@ import TextField from '@material-ui/core/TextField';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import './Contact.css'
+
+
+const theme = createMuiTheme ({
+    overrides: {
+        MuiFormLabel: {
+            color: 'red',
+            root: {
+                fontSize: '20pt',
+                '&$focused': {
+                    color: 'gray',
+            }
+        }
+    } 
+    }
+})
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -22,15 +40,14 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        background: '#947c7c',
     },
     p: {
         fontSize: '72pt',
-        color: 'white',
+        color: 'black',
         marginBottom: '30px'
     },
     h1: {
-        color: 'white',
+        color: 'black',
         fontSize: '24pt',
         alignSelf: 'flex-start',
         marginLeft: '30px'
@@ -41,11 +58,14 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         borderRadius: '10px',
-        background: 'white',
         borderStyle: 'none',
         padding: '15px',
         boxSizing: 'border-box',
+        background: 'white',
         margin: '15px',
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#640D0D',
+            },
     },
     TextareaAutosize: {
         width: '90%',
@@ -55,8 +75,9 @@ const useStyles = makeStyles(theme => ({
         padding: '10px',
         boxSizing: 'border-box',
         margin: '5px',
-        fontSize: '12pt'
-        
+        fontSize: '12pt',
+        fontFamily: 'Open Sans, sans-serif',
+        overflow: 'scroll',
     },
     buttonMargin: {
         margin: theme.spacing(1),
@@ -68,11 +89,12 @@ const useStyles = makeStyles(theme => ({
     buttonStyle: {
         background: '#640D0D',
         borderRadius: '10px',
+        fontSize: '24pt',
         border: 0,
         color: 'white',
         marginTop: '20px',
-        height: '100px',
-        width: '200px',
+        height: '10%',
+        width: '30%',
         '&:hover': {
         backgroundColor: fade('#640D0D', 0.75),
         }
@@ -103,29 +125,25 @@ export default function Contact() {
     
     
     return (
-        <form id='font' className={classes.container} method='POST' noValidate autoComplete='on'>
+        <ThemeProvider theme={theme}>
+        <form className={classes.container} method='POST' noValidate autoComplete='on'>
             <div className={classes.formContainer}>
                 <p className={classes.p}>Contact Us</p>
-                <h1 className={classes.h1}>Name</h1>
                 <TextField
-                    id='font'
                     className={classes.TextField}
                     value={name}
+                    label="Name"
                     onChange={(e) => setName(e.target.value)}
                     margin='normal'
                 />
-                <h1 className={classes.h1}>Email</h1>
                 <TextField
-                    id='font'
                     className={classes.TextField}
                     value={email}
+                    label="Email"
                     type='email'
                     onChange={(e) => setEmail(e.target.value)}
-                    margin='normal'
                 />
-                <h1 className={classes.h1}>Message</h1>
                 <TextareaAutosize
-                    id='font'
                     label='Message'
                     placeholder='Write your message here...'
                     rows={10}
@@ -143,5 +161,6 @@ export default function Contact() {
                 </Button>
             </div>
         </form>
+        </ThemeProvider>
     );
     };
