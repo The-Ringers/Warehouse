@@ -5,7 +5,6 @@ import Contact from '../components/Contact/Contact';
 describe('Contact page loads', function () {
     //before
     it('This container will display Contact', () => {
-        console.log('here')
         const { container } = render(<Contact />)
         expect(container.textContent).toContain("Contact")
     });
