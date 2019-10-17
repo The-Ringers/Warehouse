@@ -5,7 +5,6 @@ import { Sidebar } from '../components/Sidebar/Sidebar';
 describe('Sidebar page loads', function () {
     //before
     it('This container will display inventario', () => {
-        console.log('here')
         const { container } = render(<Sidebar />)
         expect(container.textContent).toContain("Inventario")
     });

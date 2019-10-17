@@ -6,7 +6,6 @@ import Landing from '../components/Landing/Landing';
 describe('Landing page loads', function () {
     //before
     it('This container will display The', () => {
-        console.log('here')
         const { container } = render(<Landing />)
         expect(container.textContent).toContain("The")
     });
