@@ -22,7 +22,7 @@ const columns = [
   
 function createData(sku, description, amount, price) {
     const itemTotalCalc = parseFloat(price * amount).toFixed(2); 
-    return { sku, description, amount, price, itemTotalCalc };
+    return { sku, description, amount, price:`$${price}`, itemTotalCalc:`$${itemTotalCalc}` };
 }
   
 const useStyles = makeStyles({
@@ -70,13 +70,12 @@ export default function Search() {
         axios.get(`/api/sales/${saleID}?warehouse_id=${warehouse_id}`)
             .then(response => {
                 const newSaleDetails = response.data.sale_details.map(sale => {
-                    return createData(sale.sku, sale.description, sale.amount, sale.price)
+                    return createData(sale.sku, sale.description, sale.amount, parseFloat(sale.price).toFixed(2))
                 })
                 setRenderSale(true);
                 setSaleDetails(newSaleDetails);
                 setCategoryInfo(response.data.singleSale[0]); 
                 setCustomerInfo(response.data.customer_info[0])
-                console.log(response.data);
             })
             .catch(err => console.log(err))
     }; 
@@ -141,16 +140,16 @@ export default function Search() {
                         <TableRow>
                             <TableCell rowSpan={3} />
                             <TableCell colSpan={2}>Subtotal</TableCell>
-                            <TableCell align="right">{saleCategoryInfo.subtotal}</TableCell>
+                            <TableCell align="right">${saleCategoryInfo.subtotal}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Tax</TableCell>
                             <TableCell align="right">{`${((saleCategoryInfo.tax / saleCategoryInfo.total) * 100).toFixed(0)} %`}</TableCell>
-                            <TableCell align="right">{saleCategoryInfo.tax}</TableCell>
+                            <TableCell align="right">${saleCategoryInfo.tax}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{saleCategoryInfo.total}</TableCell>
+                            <TableCell align="right">${saleCategoryInfo.total}</TableCell>
                         </TableRow>
                         </TableBody>
                     </Table>

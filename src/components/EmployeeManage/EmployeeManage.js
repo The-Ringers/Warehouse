@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import axios from 'axios'
-import { Table, TableHead, TableRow, TableBody, TableCell, Container, TextField, Select, MenuItem, InputLabel, FormControl, Button } from '@material-ui/core'
+import { Table, TableHead, TableRow, TableBody, TableCell, Container, TextField, Select, MenuItem, InputLabel, FormControl, Button, Modal } from '@material-ui/core'
 import { Edit, Delete } from '@material-ui/icons';
 import { makeStyles, fade } from '@material-ui/core/styles'
 
@@ -11,6 +11,13 @@ function EmployeeManage(props) {
 
     const [ employees, setEmployees ] = useState([])
     const [ state, setState ] = useState({
+        first_name: '',
+        last_name: '',
+        email: '',
+        role: ''
+    })
+    const [ open, setOpen] = useState(false)
+    const [ editUser, setEditUser ] = useState({
         first_name: '',
         last_name: '',
         email: '',
@@ -30,6 +37,13 @@ function EmployeeManage(props) {
     function handleChange(event) {
         setState({
             ...state,
+            [event.target.name]: event.target.value
+        })
+    }
+
+     function handleEditChange(event) {
+        setEditUser({
+            ...editUser,
             [event.target.name]: event.target.value
         })
     }
@@ -75,17 +89,64 @@ function EmployeeManage(props) {
             })
     }
 
-    const editEmployee = (id, index) => {
-        console.log(id)
+    const editEmployee = (id, first_name, last_name, email, role, index) => {
 
+        setEditUser({
+            id,
+            first_name,
+            last_name,
+            email,
+            role,
+            index
+        })
+
+        handleOpen()
     }
 
+    const edit = () => {
+
+        const { id, first_name, last_name, email, role, index } = editUser
+        const body = {
+            first_name,
+            last_name,
+            email,
+            role
+        }
+        axios.put(`/api/admin/employee/${id}`, body)
+            .then( response => {
+                employees[index] = {
+                    id,
+                    first_name,
+                    last_name,
+                    email,
+                    role
+                }
+                handleClose()
+            })
+            .catch( error => {
+                console.log(error)
+            })
+    }
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+
     const useStyles = makeStyles( theme => ({
-        table: {
+        root: {
             width: 'calc(100% - 300px)',
+            marginLeft: '300px'
+        },
+        table: {
+            // width: 'calc(100% - 300px)',
         },
         addBar: {
-            width: '85%',
+            width: '1050px',
             height: '60px',
             display: 'flex',
             flexDirection: 'row',
@@ -126,6 +187,26 @@ function EmployeeManage(props) {
                 cursor: 'pointer'
             },
             marginLeft: '10px'
+        },
+        modal: {
+            width: '1200px',
+            height: '60px',
+        },
+        editBar: {
+            top: '500px',
+            left: '320px',
+            position: 'fixed',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: '100px',
+            padding: '20px 10px',
+            height: '100px',
+            width: '1050px',
+            backgroundColor: '#e5e5e5'
+        },
+        editButton: {
+            marginTop: '18px'
         }
     }))
 
@@ -135,21 +216,24 @@ function EmployeeManage(props) {
     console.log(employees)
 
     const mappedEmployees = employees.map( (element, index, array) => {
+
+        const{ user_id, first_name, last_name, email, role } = element
+
         return (
-            <TableRow key={ element.user_id }>
-                <TableCell>{ element.first_name } { element.last_name }</TableCell>
-                <TableCell>{ element.email }</TableCell>
-                <TableCell>{ element.role }</TableCell>
+            <TableRow key={ user_id }>
+                <TableCell>{ first_name } { last_name }</TableCell>
+                <TableCell>{ email }</TableCell>
+                <TableCell>{ role }</TableCell>
                 <TableCell>
-                    <Edit className={ classes.icon } onClick={ () => editEmployee(element.user_id, index)} />
-                    <Delete className={ classes.icon } onClick={ () => deleteEmployee(element.user_id, index)} />
+                    <Edit className={ classes.icon } onClick={ () => editEmployee(user_id, first_name, last_name, email, role, index)} />
+                    <Delete className={ classes.icon } onClick={ () => deleteEmployee(user_id, index)} />
                 </TableCell>
             </TableRow>
         )
     })
 
     return (
-        <Container className="manager" >
+        <Container className={ `manager ${classes.root}` } >
             <Container className={ classes.addBar }>
                 <TextField className={ `${classes.barChild} ${classes.input}` } label="First Name" name="first_name" value={ state.first_name } onChange={ handleChange } />
                 <TextField className={ `${classes.barChild} ${classes.input}` } label="Last Name" name="last_name" value={ state.last_name } onChange={ handleChange } />
@@ -176,6 +260,21 @@ function EmployeeManage(props) {
                     { mappedEmployees }
                 </TableBody>
             </Table>
+            <Modal open={ open } onClose={ handleClose } className={ classes.modal } >
+                <Container className={ classes.editBar }>
+                    <TextField className={ `${classes.barChild} ${classes.input}` } label="First Name" name="first_name" value={ editUser.first_name } onChange={ handleEditChange } />
+                    <TextField className={ `${classes.barChild} ${classes.input}` } label="Last Name" name="last_name" value={ editUser.last_name } onChange={ handleEditChange } />
+                    <TextField className={ `${classes.barChild} ${classes.input}` } label="Email" name="email" value={ editUser.email } onChange={ handleEditChange } />
+                    <FormControl className={ `${classes.barChild} ${classes.input}` }>
+                        <InputLabel>Role</InputLabel>
+                        <Select name="role" value={ editUser.role } onChange={ handleEditChange } >
+                            <MenuItem value={ 'employee' }>Employee</MenuItem>
+                            <MenuItem value={ 'manager' }>Manager</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button className={ `${classes.button} ${classes.barChild} ${classes.editButton}` } onClick={ edit } >Edit Employee</Button>
+                </Container>
+            </Modal>
         </Container>
     )
 }
