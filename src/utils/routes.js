@@ -9,15 +9,19 @@ import Invoice from '../components/Invoice/Invoice';
 import Inventory from '../components/Inventory/Inventory';
 import Order from '../components/Order/Order'
 import CompanyRegister from '../components/CompanyRegister/CompanyRegister'
+import AdminDashboard from '../components/AdminDashboard/AdminDashboard'
+import CompanyDashboard from '../components/CompanyDashboard/CompanyDashboard'
 
 export default (
     <Switch>
         <Route exact path='/' component={Landing}/>
         <Route path='/contact' component={Contact} />
+        <Route exact path='/admin/dashboard' component={AdminDashboard}/>
+        <Route exact path='/company/dashboard' component={CompanyDashboard}/>
         <Route path='/:company/dashboard' component={Dashboard}/>
         <Route path='/:company/invoice/:id' component={Invoice}/>
         <Route path='/:company/inventory/:id' component={Inventory}/>
         <Route path='/order' component={Order}/>
-        <Route path='/register-company' component={CompanyRegister} />
+        <Route path='/register-company' component={CompanyRegister}/>
     </Switch>
 )
