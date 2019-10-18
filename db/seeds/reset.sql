@@ -38,10 +38,6 @@ CREATE TABLE customers (
     first_name VARCHAR(40),
     last_name VARCHAR(40),
     company_name VARCHAR(40),
-    address VARCHAR(120),
-    city VARCHAR(40),
-    state VARCHAR(2),
-    zip VARCHAR(20),
     email VARCHAR(320) NOT NULL,
     phone VARCHAR(15)
 );
@@ -50,10 +46,11 @@ CREATE TABLE inventory (
     inventory_id SERIAL PRIMARY KEY,
     warehouse_id INTEGER NOT NULL REFERENCES warehouses(warehouse_id),
     price DECIMAL CONSTRAINT positive_price CHECK (price > 0),
-    quantity INTEGER NOT NULL CONSTRAINT positive_price CHECK (amount > 0),
+    quantity INTEGER NOT NULL,
     sku VARCHAR(12),
     description VARCHAR(140) NOT NULL,
-    category VARCHAR(20) NOT NULL
+    category VARCHAR(20) NOT NULL,
+    discontinued BOOLEAN DEFAULT false
 );
 
 CREATE TABLE sales (
@@ -64,9 +61,10 @@ CREATE TABLE sales (
     customer_id INTEGER NOT NULL REFERENCES customers(customer_id),
     category sales_category NOT NULL,
     payment payment_type, 
-    subtotal DECIMAL NOT NULL CONSTRAINT positive_price CHECK (amount > 0),
-    tax DECIMAL NOT NULL CONSTRAINT positive_price CHECK (amount > 0),
-    total DECIMAL NOT NULL CONSTRAINT positive_price CHECK (amount > 0),
+    subtotal DECIMAL NOT NULL CONSTRAINT positive_subtotal CHECK (subtotal > 0),
+    tax DECIMAL NOT NULL CONSTRAINT positive_tax CHECK (tax > 0),
+    total DECIMAL NOT NULL CONSTRAINT positive_total CHECK (total > 0),
+    date NUMERIC, 
     pdf BYTEA
 );
 
@@ -74,5 +72,23 @@ CREATE TABLE sale_details (
     sale_details_id SERIAL PRIMARY KEY,
     sales_id INTEGER NOT NULL REFERENCES sales(sales_id),
     inventory_id INTEGER NOT NULL REFERENCES inventory(inventory_id),
-    amount INTEGER NOT NULL CONSTRAINT positive_price CHECK (amount > 0)
+    amount INTEGER NOT NULL CONSTRAINT positive_amount CHECK (amount > 0)
 );
+
+CREATE TABLE warehouse_registry (
+   registry_id SERIAL PRIMARY KEY,
+   warehouse_id INTEGER NOT NULL REFERENCES warehouses(warehouse_id),
+   user_id INTEGER NOT NULL REFERENCES users(user_id)
+);
+
+CREATE TABLE shipping_delivery (
+    ship_del_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(40),
+    last_name VARCHAR(40),
+    address VARCHAR(120),
+    city VARCHAR(40),
+    state VARCHAR(2),
+    zip VARCHAR(15),
+    sales_id INTEGER REFERENCES sales(sales_id),
+    type shipping_delivery_type 
+); 

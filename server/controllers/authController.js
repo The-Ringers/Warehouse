@@ -27,6 +27,9 @@ const login = async (req, res) => {
     const db = req.app.get('db'); 
     const foundUser = await db.get_user([email]); 
 
+    console.log(foundUser[0])
+    console.log(email, password)
+
     if(!foundUser[0]) {
         return res.status(403).send('Invalid credentials, please try again.')
     }
