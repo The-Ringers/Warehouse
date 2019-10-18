@@ -3,7 +3,10 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 import { Table, TableHead, TableRow, TableBody, TableCell, Container, TextField, Select, MenuItem, InputLabel, FormControl, Button, Modal } from '@material-ui/core'
 import { Edit, Delete } from '@material-ui/icons';
-import { makeStyles, fade } from '@material-ui/core/styles'
+import { makeStyles, fade } from '@material-ui/core/styles';
+
+// Sweet Alerts 
+import swal from 'sweetalert';
 
 import './EmployeeManage.css'
 
@@ -77,16 +80,37 @@ function EmployeeManage(props) {
     }
 
     const deleteEmployee = (id, index) => {
-        console.log(id)
-        axios.delete(`/api/admin/employee/${id}`)
-            .then( response => {
-                let tempEmployees = employees
-                tempEmployees.splice(index, 1)
-                setEmployees([...tempEmployees])
-            })
-            .catch( error => {
-                console.log(error)
-            })
+        swal("Are you sure that you want to delete this user?", {
+            buttons: {
+              delete: {
+                text: "Delete", 
+                value: "Delete"
+              },
+              cancel: "Cancel"
+            }
+          })
+          .then((value) => {
+              switch(value) {
+                case 'Delete':
+                axios.delete(`/api/admin/employee/${id}`)
+                    .then( response => {
+                        let tempEmployees = employees
+                        tempEmployees.splice(index, 1)
+                        setEmployees([...tempEmployees])
+                        swal({
+                            icon: "success",
+                            title: "User Deleted"
+                            })
+                    })
+                    .catch( error => {
+                        console.log(error)
+                    });
+                break; 
+
+                default: 
+                console.log('canceled')
+              }
+          })
     }
 
     const editEmployee = (id, first_name, last_name, email, role, index) => {

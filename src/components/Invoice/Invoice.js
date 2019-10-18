@@ -324,8 +324,13 @@ export default function Invoice() {
     const sale_details = itemList; 
 
     axios.post('/api/sales', {saleObject, sale_details, shippingInfo, customerInfo})
-      .then(() => {
+      .then(response => {
         setItemList([]);
+        swal({
+          icon: "success",
+          title: "Invoice Successfully Created",
+          text: `Created with Sale ID: ${response.data.sales_id}`
+        })
       })
       .catch(err => console.log(err))
   }; 
