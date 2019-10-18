@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { TextField, Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import swal from 'sweetalert'
 
 import './CompanyRegister.css'
 
@@ -23,7 +24,7 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export default function CompanyRegister() {
+export default function CompanyRegister(props) {
 
     const [form, setForm] = useState('owner')
     const [state, setState] = useState({
@@ -72,10 +73,14 @@ export default function CompanyRegister() {
             }
         }
 
-        console.log(state, body)
         axios.post('/api/company', body)
             .then( response => {
-                console.log(response)
+                swal({
+                    icon: "success",
+                    title: "Message Sent",
+                    text: `Message successfully sent to ${state.email}`
+                })
+                props.history.push('/admin/dashboard')
             })
             .catch( error => {
                 console.log(error)
