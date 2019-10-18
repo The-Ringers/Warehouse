@@ -211,8 +211,9 @@ function Inventory(props) {
   };
 
   const setNewInventory = () => {
+      const role = props.role
       const { category } = props.categories[value]
-      const body = {sku, description, quantity, price, category, inventory_id: inventoryID}
+      const body = {sku, description, quantity, price, category, inventory_id: inventoryID, role}
       inventory[row] = {id: inventoryID, sku, description, quantity, price}
       setEditItem(!editItem)
       axios.put('/api/inventory/edit', body)
