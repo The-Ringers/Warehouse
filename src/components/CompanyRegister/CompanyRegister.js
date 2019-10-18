@@ -24,7 +24,7 @@ const useStyles = makeStyles( theme => ({
 }))
 
 
-export default function CompanyRegister(props) {
+function CompanyRegister(props) {
 
     const [form, setForm] = useState('owner')
     const [state, setState] = useState({
@@ -81,6 +81,7 @@ export default function CompanyRegister(props) {
                     text: `Message successfully sent to ${state.email}`
                 })
                 props.history.push('/admin/dashboard')
+                
             })
             .catch( error => {
                 console.log(error)
@@ -141,3 +142,5 @@ export default function CompanyRegister(props) {
         </Paper>
     )
 }
+
+export default CompanyRegister
