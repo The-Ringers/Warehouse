@@ -3,6 +3,8 @@ import axios from 'axios'
 import { TextField, Paper, Button } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import swal from 'sweetalert'
+import { connect } from 'react-redux';
+import { addCompanies, addWarehouses } from '../../redux/reducer';
 
 import './CompanyRegister.css'
 
@@ -80,8 +82,9 @@ function CompanyRegister(props) {
                     title: "Message Sent",
                     text: `Message successfully sent to ${state.email}`
                 })
-                props.history.push('/admin/dashboard')
-                
+                props.addCompanies(body.company)
+                props.addWarehouses(body.warehouse)
+                props.history.push('/admin/dashboard')                
             })
             .catch( error => {
                 console.log(error)
@@ -143,4 +146,4 @@ function CompanyRegister(props) {
     )
 }
 
-export default CompanyRegister
+export default connect(null, {addCompanies, addWarehouses})(CompanyRegister)

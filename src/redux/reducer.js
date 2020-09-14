@@ -14,6 +14,8 @@ const initialState = {
 
 const ADD_USER = 'ADD_USER';
 const ADD_WAREHOUSE_ID = 'ADD_WAREHOUSE_ID';
+const ADD_WAREHOUSES = 'ADD_WAREHOUSES'
+const ADD_COMPANIES = 'ADD_COMPANIES';
 const ADD_COMPANY_ID = 'ADD_COMPANY_ID';
 const ADD_COMPANY_INDEX = 'ADD_COMPANY_INDEX';
 const WIPE_REDUX = 'WIPE_REDUX';
@@ -30,6 +32,20 @@ export function addWarehouseId(warehouse_id){
     return{
         type: ADD_WAREHOUSE_ID,
         payload: { warehouse_id }
+    }
+}
+
+export function addWarehouses(warehouses){
+    return{
+        type: ADD_WAREHOUSES,
+        payload: { warehouses }
+    }
+}
+
+export function addCompanies(companies){
+    return{
+        type: ADD_COMPANIES,
+        payload: { companies }
     }
 }
 
@@ -67,6 +83,10 @@ export default function reducer(state = initialState, action){
             return Object.assign({}, state, {user_id, first_name, last_name, role, email, warehouses, companies})
         case ADD_WAREHOUSE_ID:
             return Object.assign({}, state, {warehouse_id: action.payload.warehouse_id})
+        case ADD_WAREHOUSES:
+            return Object.assign({}, state, {warehouses: [...state.warehouses, action.payload.warehouses]})
+        case ADD_COMPANIES:
+            return Object.assign({}, state, {companies: [...state.companies, action.payload.companies]})
         case ADD_COMPANY_ID:
             return Object.assign({}, state, {company_id: action.payload.company_id})
         case ADD_COMPANY_INDEX:

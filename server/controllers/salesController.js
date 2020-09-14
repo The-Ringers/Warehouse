@@ -60,7 +60,7 @@ const createSales = async (req, res) => {
     const { shipping_type, address, city, state, zip } = req.body.shippingInfo;  
     const addingShipping = await db.add_shipping_delivery([first_name, last_name, address, city, state, zip, sales_id, shipping_type]); 
 
-    res.status(200).send('Sale added to the DB');
+    res.status(200).send({sales_id})
 };
 
 const editSales = async (req, res) => {

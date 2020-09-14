@@ -52,11 +52,14 @@ const addInventory = async (req, res) => {
 
 const editInventory = async (req, res) => {
     const db = req.app.get('db'); 
-    const { role } = req.session; 
-    const { price, quantity, sku, description, category, inventory_id } = req.body;
+    // const { role } = req.session; 
+    const { price, quantity, sku, description, category, inventory_id, role } = req.body;
 
+    const newPrice = price.split('').splice(1).join('')
+    console.log(newPrice)
+    console.log(role)
     if(role === 'owner' || role === 'manager' || role === 'admin') {
-        await db.edit_inventory_details([price, +quantity, sku, description, category, inventory_id]);
+        await db.edit_inventory_details([+newPrice, +quantity, sku, description, category, inventory_id]);
         res.status(200).send('')
     }
 

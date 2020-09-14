@@ -25,7 +25,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props.company_id)
         const mappedWarehouses = this.props.warehouses.map((element, index) => {
             if(element.company_id === this.props.company_id){
                 return (
